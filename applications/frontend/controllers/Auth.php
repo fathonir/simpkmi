@@ -10,7 +10,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property User_model $user_model
  * @property Kegiatan_model $kegiatan_model
  * @property Reviewer_model $reviewer_model 
- * @property Mahasiswa_model $mahasiswa_model 
+ * @property Mahasiswa_model $mahasiswa_model
+ * @property Dosen_model $dosen_model
  * @property Program_studi_model $program_studi_model
  * @property CI_Email $email
  */
@@ -29,6 +30,7 @@ class Auth extends Frontend_Controller
 		$this->load->model(MODEL_USER, 'user_model');
 		$this->load->model(MODEL_KEGIATAN, 'kegiatan_model');
 		$this->load->model(MODEL_REVIEWER, 'reviewer_model');
+		$this->load->model(MODEL_DOSEN, 'dosen_model');
 		$this->load->model(MODEL_MAHASISWA, 'mahasiswa_model');
 		$this->load->model(MODEL_PROGRAM_STUDI, 'program_studi_model');
 	}
@@ -277,6 +279,11 @@ class Auth extends Frontend_Controller
 							$user->mahasiswa = $this->mahasiswa_model->get($user->mahasiswa_id);
 							$user->mahasiswa->program_studi = $this->program_studi_model->get($user->mahasiswa->program_studi_id);
 							$redirect_to = base_url() . 'mahasiswa';
+						}
+						else if ($user->tipe_user == TIPE_USER_DOSEN)
+						{
+							$user->dosen = $this->dosen_model->get($user->dosen_id);
+							$redirect_to = base_url() . 'dosen';
 						}
 						else if ($user->tipe_user == TIPE_USER_ADMIN)
 						{
