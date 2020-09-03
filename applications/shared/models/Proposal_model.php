@@ -194,6 +194,44 @@ class Proposal_model extends CI_Model
 	}
 
 	/**
+	 * @param int $kegiatan_id
+	 * @param int $dosen_id
+	 */
+	public function list_by_dosen_pendamping($kegiatan_id, $dosen_id, $tahapan_pendampingan_id)
+	{
+		/**
+		 * select p.id, p.judul, m.nama as ketua, m.nim, db.nama as pembimbing, db.nidn, p.progress_pendampingan
+		from proposal p
+		join kegiatan k on k.id = p.kegiatan_id
+		join perguruan_tinggi pt on pt.id = p.perguruan_tinggi_id
+		join dosen_pendamping dp on dp.kegiatan_id = k.id and dp.perguruan_tinggi_id = pt.id
+		join anggota_proposal ap on ap.proposal_id = p.id and ap.no_urut = 1
+		join mahasiswa m on m.id = ap.mahasiswa_id
+		left join dosen db on db.id = p.dosen_id
+		where p.kegiatan_id = 14 and dp.dosen_id = 653101
+		 */
+
+		return $this->db
+			->select('p.id, k.tahun, p.judul, m.nama as ketua, m.nim as nim_ketua')
+			->select('db.nama as pembimbing, db.nidn')
+			->select('case when lp.id is not null then 1 else 0 end as laporan_pendampingan', FALSE)
+			->from('proposal p')
+			->join('kegiatan k', 'k.id = p.kegiatan_id')
+			->join('perguruan_tinggi pt', 'pt.id = p.perguruan_tinggi_id')
+			->join('dosen_pendamping dp','dp.kegiatan_id = k.id AND dp.perguruan_tinggi_id = pt.id', '', FALSE)
+			->join('laporan_pendampingan lp', 'lp.dosen_pendamping_id = dp.id ' .
+				'AND lp.proposal_id = p.id ' .
+				'AND lp.tahapan_pendampingan_id = '.$tahapan_pendampingan_id, 'LEFT', FALSE)
+			->join('anggota_proposal ap','ap.proposal_id = p.id AND ap.no_urut = 1', '', FALSE)
+			->join('mahasiswa m', 'm.id = ap.mahasiswa_id')
+			->join('dosen db', 'db.id = p.dosen_id', 'LEFT')
+			->where('p.kegiatan_id', $kegiatan_id)
+			->where('p.is_didanai', 1)
+			->where('dp.dosen_id', $dosen_id)
+			->get()->result();
+	}
+
+	/**
 	 * Mengambil satu data Proposal
 	 * @param int $id
 	 * @param int $perguruan_tinggi_id Harus ada untuk tampilan frontend sebagai pengaman

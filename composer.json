@@ -8,7 +8,8 @@
         "codeigniter/framework": "^3.1",
         "phpoffice/phpspreadsheet": "^1.2",
         "mpdf/mpdf": "^7.1",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "ckeditor/ckeditor": "4.*"
     },
     "license": "MIT",
     "authors": [

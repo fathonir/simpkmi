@@ -12,6 +12,7 @@ define('MODEL_PROGRAM', 'Program_model');
 define('MODEL_SYARAT', 'Syarat_model');
 define('MODEL_PROPOSAL', 'Proposal_model');
 define('MODEL_ANGGOTA_PROPOSAL', 'Anggota_proposal_model');
+define('MODEL_LAPORAN_PENDAMPINGAN', 'LaporanPendampingan_model');
 define('MODEL_REQUEST_USER', 'RequestUser_model');
 define('MODEL_USER', 'User_model');
 define('MODEL_REJECT_MESSAGE', 'RejectMessage_model');
@@ -19,6 +20,7 @@ define('MODEL_REVIEWER', 'Reviewer_model');
 define('MODEL_PLOT_REVIEWER', 'PlotReviewer_model');
 define('MODEL_TAHAPAN', 'Tahapan_model');
 define('MODEL_TAHAPAN_PROPOSAL', 'TahapanProposal_model');
+define('MODEL_TAHAPAN_PENDAMPINGAN', 'TahapanPendampingan_model');
 define('MODEL_KATEGORI', 'Kategori_model');
 define('MODEL_UNIT_KEWIRAUSAHAAN', 'Unit_kewirausahaan_model');
 define('MODEL_PROFIL_KELOMPOK', 'Profil_kelompok_model');
@@ -47,6 +49,7 @@ define('TIPE_USER_NORMAL', 1);
 define('TIPE_USER_REVIEWER', 2);
 define('TIPE_USER_VERIFIKATOR', 3);
 define('TIPE_USER_MAHASISWA', 4);
+define('TIPE_USER_DOSEN', 5);
 define('TIPE_USER_ADMIN', 99);
 
 // Tahapan Proposal
