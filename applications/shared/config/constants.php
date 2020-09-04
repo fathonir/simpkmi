@@ -33,6 +33,7 @@ define('MODEL_PESERTA_MEETING', 'PesertaMeeting_model');
 define('MODEL_PROGRAM_STUDI', 'Program_studi_model');
 define('MODEL_MAHASISWA', 'Mahasiswa_model');
 define('MODEL_DOSEN', 'Dosen_model');
+define('MODEL_DOSEN_PENDAMPING', 'DosenPendamping_model');
 define('MODEL_ISIAN', 'Isian_model');
 
 // Jenis Program

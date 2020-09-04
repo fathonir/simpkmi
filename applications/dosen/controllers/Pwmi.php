@@ -7,6 +7,7 @@
  * @property Anggota_proposal_model $anggota_model
  * @property Mahasiswa_model $mahasiswa_model
  * @property LaporanPendampingan_model $lap_pendampingan_model
+ * @property Dosen_Pendamping_model $dosen_pendamping_model
  */
 class Pwmi extends Dosen_Controller
 {
@@ -19,6 +20,7 @@ class Pwmi extends Dosen_Controller
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_model');
 		$this->load->model(MODEL_MAHASISWA, 'mahasiswa_model');
 		$this->load->model(MODEL_LAPORAN_PENDAMPINGAN, 'lap_pendampingan_model');
+		$this->load->model(MODEL_DOSEN_PENDAMPING, 'dosen_pendamping_model');
 	}
 
 	public function view($proposal_id)
@@ -40,6 +42,8 @@ class Pwmi extends Dosen_Controller
 	public function update($proposal_id, $tahapan_pendampingan_id)
 	{
 		$dosen = $this->session->user->dosen;
+		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_KBMI);
+		$dosen_pendamping = $this->dosen_pendamping_model->get_from_dosen($dosen->id, $kegiatan->id);
 		$proposal = $this->proposal_model->get_single($proposal_id);
 		$lap_pendampingan = $this->lap_pendampingan_model->get_single($dosen->id, $proposal_id, $tahapan_pendampingan_id);
 
@@ -75,6 +79,9 @@ class Pwmi extends Dosen_Controller
 
 			if ($lap_pendampingan != null)
 			{
+				$lap_pendampingan->dosen_pendamping_id = $dosen_pendamping->id;
+				$lap_pendampingan->tahapan_pendampingan_id = $tahapan_pendampingan_id;
+				$lap_pendampingan->proposal_id = $proposal_id;
 				$lap_pendampingan->laporan = $this->input->post('laporan');
 				if ($upload_berhasil)
 				{
@@ -87,6 +94,9 @@ class Pwmi extends Dosen_Controller
 			else
 			{
 				$lap_pendampingan = new stdClass();
+				$lap_pendampingan->dosen_pendamping_id = $dosen_pendamping->id;
+				$lap_pendampingan->tahapan_pendampingan_id = $tahapan_pendampingan_id;
+				$lap_pendampingan->proposal_id = $proposal_id;
 				$lap_pendampingan->laporan = $this->input->post('laporan');
 				if ($upload_berhasil)
 				{

@@ -44,9 +44,9 @@ class LaporanPendampingan_model extends CI_Model
 			->get()->first_row();
 	}
 
-	public function add($laporan_pendampintan)
+	public function add($laporan_pendampingan)
 	{
-		return $this->db->insert('laporan_pendampingan', $laporan_pendampintan);
+		return $this->db->insert('laporan_pendampingan', $laporan_pendampingan);
 	}
 
 	public function update($laporan_pendampingan)
