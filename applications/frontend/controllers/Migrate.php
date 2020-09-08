@@ -9,7 +9,7 @@ class Migrate extends Frontend_Controller
 	{
 		parent::__construct();
 		
-		if ( ! $this->input->is_cli_request())
+		if ( ! $this->input->is_cli())
 		{
 			echo "Migrate harus dijalankan melalui cli";
 			exit();
