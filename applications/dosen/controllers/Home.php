@@ -24,7 +24,15 @@ class Home extends Dosen_Controller
 		$dosen = $this->session->user->dosen;
 		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_KBMI);
 		$tahapan_pendampingan = $this->tpendampingan_model->get_aktif($kegiatan->id);
-		$proposal_set = $this->proposal_model->list_by_dosen_pendamping($kegiatan->id, $dosen->id, $tahapan_pendampingan->id);
+
+		if ($tahapan_pendampingan != null)
+		{
+			$proposal_set = $this->proposal_model->list_by_dosen_pendamping($kegiatan->id, $dosen->id, $tahapan_pendampingan->id);
+		}
+		else
+		{
+			$proposal_set = $this->proposal_model->list_by_dosen_pendamping($kegiatan->id, $dosen->id);
+		}
 
 		$this->smarty->assign('kegiatan', $kegiatan);
 		$this->smarty->assign('tahapan_pendampingan', $tahapan_pendampingan);

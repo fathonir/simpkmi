@@ -23,7 +23,9 @@
 								<th>Judul</th>
 								<th>Nama Ketua</th>
 								<th>Dosen Pembimbing</th>
-								<th class="text-center">Status Pelaporan</th>
+								{if $tahapan_pendampingan}
+									<th class="text-center">Status Pelaporan</th>
+								{/if}
 								<th></th>
 							</tr>
 							</thead>
@@ -34,17 +36,17 @@
 								<td>{$proposal->judul}</td>
 								<td>{$proposal->ketua} ({$proposal->nim_ketua})</td>
 								<td>{$proposal->pembimbing} ({$proposal->nidn})</td>
-								<td class="text-center">
-									{if $proposal->laporan_pendampingan}
-										<span class="label label-success">Sudah</span>
-									{else}
-										<span class="label label-default">Belum</span>
-									{/if}
-								</td>
+								{if $tahapan_pendampingan}
+									<td class="text-center">
+										{if $proposal->laporan_pendampingan}
+											<span class="label label-success">Sudah</span>
+										{else}
+											<span class="label label-default">Belum</span>
+										{/if}
+									</td>
+								{/if}
 								<td>
-									{if $tahapan_pendampingan}
-										<a class="btn btn-sm btn-primary" href="{site_url('pwmi/view')}/{$proposal->id}">Update</a>
-									{/if}
+									<a class="btn btn-sm btn-primary" href="{site_url('pwmi/view')}/{$proposal->id}">Lihat</a>
 								</td>
 							</tr>
 							{/foreach}

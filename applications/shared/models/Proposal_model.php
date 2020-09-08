@@ -197,19 +197,12 @@ class Proposal_model extends CI_Model
 	 * @param int $kegiatan_id
 	 * @param int $dosen_id
 	 */
-	public function list_by_dosen_pendamping($kegiatan_id, $dosen_id, $tahapan_pendampingan_id)
+	public function list_by_dosen_pendamping($kegiatan_id, $dosen_id, $tahapan_pendampingan_id = null)
 	{
-		/**
-		 * select p.id, p.judul, m.nama as ketua, m.nim, db.nama as pembimbing, db.nidn, p.progress_pendampingan
-		from proposal p
-		join kegiatan k on k.id = p.kegiatan_id
-		join perguruan_tinggi pt on pt.id = p.perguruan_tinggi_id
-		join dosen_pendamping dp on dp.kegiatan_id = k.id and dp.perguruan_tinggi_id = pt.id
-		join anggota_proposal ap on ap.proposal_id = p.id and ap.no_urut = 1
-		join mahasiswa m on m.id = ap.mahasiswa_id
-		left join dosen db on db.id = p.dosen_id
-		where p.kegiatan_id = 14 and dp.dosen_id = 653101
-		 */
+		if ($tahapan_pendampingan_id == null)
+		{
+			$tahapan_pendampingan_id = 'NULL';
+		}
 
 		return $this->db
 			->select('p.id, k.tahun, p.judul, m.nama as ketua, m.nim as nim_ketua')
