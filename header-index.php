@@ -53,6 +53,13 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
+	// Redirect to Portal
+	if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '/index.php') {
+		http_response_code(301);
+		header("Location: /portal");
+		die();
+	}
+
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 	
 	date_default_timezone_set('Asia/Jakarta');
