@@ -75,6 +75,21 @@ class Pwmi extends Dosen_Controller
 				$upload_berhasil = false;
 				$attachment_nama_file = null;
 				$attachment_nama_asli = null;
+
+				$upload_error_msg = $this->upload->display_errors('', '');
+
+				if ($upload_error_msg != 'You did not select a file to upload.')
+				{
+					if ($upload_error_msg == 'The filetype you are attempting to upload is not allowed.')
+					{
+						$this->session->set_flashdata('upload_error_msg', 'File yang boleh diupload hanya PDF');
+					}
+					else
+					{
+						$this->session->set_flashdata('upload_error_msg', $this->upload->display_errors());
+					}
+
+				}
 			}
 
 			if ($lap_pendampingan != null)

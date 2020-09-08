@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 
-			<h2 class="page-header">Update Laporan</h2>
+			<h2 class="page-header">Detail Pelaporan</h2>
 
 			<div class="form-horizontal">
 				<div class="form-group">
@@ -33,7 +33,7 @@
 				<tr>
 					<th>Tahap</th>
 					<th>Masa Pelaporan</th>
-					<th>Status Pelaporan</th>
+					<th class="text-center">Status Pelaporan</th>
 					<th></th>
 				</tr>
 				</thead>
@@ -44,14 +44,14 @@
 						<td>
 							{$lap_pendampingan->tgl_awal_laporan_dmy} s/d {$lap_pendampingan->tgl_akhir_laporan_dmy}
 						</td>
-						<td>
+						<td class="text-center">
 							{if $lap_pendampingan->laporan_pendampingan}
 								<span class="label label-success">Sudah</span>
 							{else}
 								<span class="label label-default">Belum</span>
 							{/if}
 						</td>
-						<td>
+						<td class="text-center">
 							{if strtotime($lap_pendampingan->tgl_awal_laporan) < $now and $now < strtotime($lap_pendampingan->tgl_akhir_laporan)}
 								<a class="btn btn-primary btn-sm" href="{site_url('pwmi/update/')}{$proposal->id}/{$lap_pendampingan->tahapan_pendampingan_id}">Update</a>
 							{/if}
