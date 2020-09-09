@@ -9,8 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Loader $load
  * @property CI_Upload $upload
  * @property Smarty_wrapper $smarty
- * @property CI_DB_query_builder $db
- * @property CI_DB_mysqli_driver $db
+ * @property CI_DB_query_builder|CI_DB_mysqli_driver $db
  * @property CI_Migration $migration
  */
 class Frontend_Controller extends CI_Controller
