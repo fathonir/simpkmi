@@ -339,8 +339,8 @@ class Auth extends Frontend_Controller
 		$this->session->unset_userdata('program_id');
 		$this->session->unset_userdata('kegiatan');
 
-		// redirect to home
-		redirect(base_url());
+		// redirect halaman login
+		redirect('auth/login');
 	}
 	
 	public function search_pt()
