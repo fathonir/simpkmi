@@ -2,8 +2,7 @@
 
 /**
  * @author Fathoni <m.fathoni@mail.com>
- * @property CI_DB_query_builder $db 
- * @property CI_DB_mysqli_driver $db
+ * @property CI_DB_query_builder|CI_DB_mysqli_driver $db
  */
 class Migration_Add_file_sertifikat_to_meeting extends CI_Migration
 {
