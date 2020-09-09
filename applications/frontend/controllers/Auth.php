@@ -133,11 +133,12 @@ class Auth extends Frontend_Controller
 				$body = $this->smarty->fetch('email/login_mahasiswa.tpl');
 				
 				// Kirim Email
-				$this->email->from($this->config->item('smtp_user'), 'SIM-PKMI');
+				$this->config->load('email');
+				$this->email->from($this->config->item('email_from'), $this->config->item('email_from_name'));
 				$this->email->to($email);
 				$this->email->subject('Informasi Akun SIM-PKMI');
 				$this->email->message($body);
-				$this->email->send();
+				$this->email->send(FALSE);
 				
 				// Untuk menampilkan login langsung
 				$message_2 = "<p style='margin-bottom: 15px'>Berikut adalah login Anda harap disimpan.</p>"
@@ -182,13 +183,14 @@ class Auth extends Frontend_Controller
 				$this->smarty->assign('username', $user->username);
 				$this->smarty->assign('password', $user->password);
 				$body = $this->smarty->fetch('email/login_mahasiswa.tpl');
-				
+
 				// Kirim Email
-				$this->email->from($this->config->item('smtp_user'), 'SIM-PKMI');
+				$this->config->load('email');
+				$this->email->from($this->config->item('email_from'), $this->config->item('email_from_name'));
 				$this->email->to($email);
 				$this->email->subject('Reset Password Akun SIM-PKMI');
 				$this->email->message($body);
-				$this->email->send();
+				$this->email->send(FALSE);
 				
 				// Untuk menampilkan login langsung
 				$message_2 = "<p style='margin-bottom: 15px'>Berikut adalah login Anda harap disimpan.</p>"
