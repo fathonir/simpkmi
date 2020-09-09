@@ -1,14 +1,6 @@
 .DS_Store
 .well-known/
 
-application/cache/*
-!application/cache/index.html
-!application/cache/.htaccess
-
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
-
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
@@ -32,6 +24,13 @@ composer.phar
 
 # User Guide
 /user_guide/
+
+# .htaccess
+.htaccess
+admin/.htaccess
+dosen/.htaccess
+mahasiswa/.htaccess
+reviewer/.htaccess
 
 # Applications
 applications/shared/config/database.php
