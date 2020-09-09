@@ -4,9 +4,53 @@
  * Class Tools
  * @property CI_Config $config
  * @property CI_Email $email
+ * @property CI_DB_query_builder|CI_DB_mysqli_driver $db
+ * @property Smarty_wrapper $smarty
  */
 class Tools extends CI_Controller
 {
+	public function kirim_login_pendamping($tahun_kegiatan)
+	{
+		$this->load->library('email');
+		$this->config->load('email');
+
+		$user_set = $this->db->select('d.nama, u.username, u.password, u.id')
+			->from('dosen_pendamping dp')
+			->join('kegiatan k', 'k.id = dp.kegiatan_id')
+			->join('dosen d', 'd.id = dp.dosen_id')
+			->join('user u', 'u.dosen_id = d.id AND u.is_sent = 0')
+			->where('k.tahun', $tahun_kegiatan)
+			->get()->result();
+
+		foreach ($user_set as $user)
+		{
+			$now = date('Y-m-d H:i:s');
+			echo "[{$now}] Pengiriman ke {$user->nama} ({$user->username}) ... ";
+
+			$this->smarty->assign('nama', $user->nama);
+			$this->smarty->assign('login_link', 'https://sim-pkmi.kemdikbud.go.id/auth/login');
+			$this->smarty->assign('username', $user->username);
+			$this->smarty->assign('password', $user->password);
+			$body = $this->smarty->fetch('email/dosen_pendamping_user.tpl');
+
+			$this->email->from($this->config->item('email_from'), $this->config->item('email_from_name'));
+			$this->email->to($user->username);
+			$this->email->subject('Account Login Pendamping');
+			$this->email->message($body);
+			$send_result = $this->email->send(FALSE);
+
+			if ($send_result)
+			{
+				$this->db->update('user', ['is_sent' => 1], ['id' => $user->id]);
+				echo "Berhasil!\n";
+			}
+			else
+			{
+				echo "Gagal!\n";
+			}
+		}
+	}
+
 	public function test_send_email()
 	{
 		$this->load->library('email');
