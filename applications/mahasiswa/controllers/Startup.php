@@ -28,6 +28,16 @@ class Startup extends Mahasiswa_Controller
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_model');
 		$this->load->model(MODEL_SYARAT, 'syarat_model');
 	}
+
+	/**
+	 * redirect /startup -> /update/[proposal_id] secara otomatis
+	 */
+	function index()
+	{
+		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_STARTUP);
+		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
+		redirect('startup/update/' . $proposal->id);
+	}
 	
 	function update($proposal_id)
 	{
