@@ -177,7 +177,7 @@ class Review_startup extends Reviewer_Controller
 		
 		$this->smarty->assign('penilaian_set', $penilaian_set);
 		
-		$skor_set = $this->db->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)->where('id between 7 and 10', null, false)->get('skor')->result_array();
+		$skor_set = $this->db->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)->where('id between 1 and 6', null, false)->get('skor')->result_array();
 		$this->smarty->assign('skor_option_set', array_column($skor_set, 'keterangan', 'skor'));
 		
 		$this->smarty->display();
