@@ -24,7 +24,8 @@
 				{if $updated}
 					<div class="alert alert-success alert-dismissible" role="alert">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<strong>Berhasil Simpan !</strong> Data penilaian sudah berhasil disimpan.
+						<strong>Berhasil Simpan !</strong> Data penilaian sudah berhasil disimpan.<br/>
+						<p><a href="{site_url('review-startup')}?kegiatan_id={$tahapan_proposal->kegiatan_id}&tahapan_id={$tahapan_proposal->tahapan_id}" class="btn btn-sm btn-default">Kembali Daftar Proposal</a></p>
 					</div>
 				{else}
 					<div class="alert alert-danger alert-dismissible" role="alert">
