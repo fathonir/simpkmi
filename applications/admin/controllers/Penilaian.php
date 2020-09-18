@@ -25,6 +25,7 @@ class Penilaian extends Admin_Controller
 		$tahapan_id		= $this->input->get('tahapan_id');
 		
 		$data_set = $this->db
+			->select('tp.id as tp_id')
 			->select('p.judul, pt.nama_pt, r1.nama as reviewer_1, r2.nama as reviewer_2, r3.nama as reviewer_3')
 			->select('pr1.biaya_rekomendasi as biaya_rekomendasi_1, pr2.biaya_rekomendasi as biaya_rekomendasi_2, pr3.biaya_rekomendasi as biaya_rekomendasi_3')
 			->select('pr1.nilai_reviewer as nilai_reviewer_1, pr2.nilai_reviewer as nilai_reviewer_2, pr3.nilai_reviewer as nilai_reviewer_3, ABS(pr1.nilai_reviewer - pr2.nilai_reviewer) as nilai_selisih')
@@ -41,7 +42,7 @@ class Penilaian extends Admin_Controller
 			->join('plot_reviewer pr', 'pr.tahapan_proposal_id = tp.id', 'LEFT')
 			->where(['tp.kegiatan_id' => $kegiatan_id, 'tp.tahapan_id' => $tahapan_id])
 			->group_by('p.judul, pt.nama_pt, r1.nama, r2.nama, r3.nama, pr1.nilai_reviewer, pr2.nilai_reviewer, pr3.nilai_reviewer, pr1.biaya_rekomendasi, pr2.biaya_rekomendasi, pr3.biaya_rekomendasi')
-			->order_by('13 DESC, 14 DESC', NULL, FALSE) // AVG & SUM
+			->order_by('14 DESC, 15 DESC', NULL, FALSE) // AVG & SUM
 			->get()->result();
 		$this->smarty->assign('data_set', $data_set);
 		

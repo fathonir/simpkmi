@@ -31,6 +31,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
+						<th>ID</th>
 						<th>Judul</th>
 						<th>Perguruan Tinggi</th>
 						<th>R1</th>
@@ -51,6 +52,7 @@
 					{foreach $data_set as $data}
 						<tr>
 							<td>{$data@index + 1}</td>
+							<td>{$data->tp_id}</td>
 							<td>{$data->judul}</td>
 							<td>{$data->nama_pt}</td>
 							<td>{$data->reviewer_1}</td>
