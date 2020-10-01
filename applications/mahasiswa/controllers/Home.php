@@ -26,6 +26,13 @@ class Home extends Mahasiswa_Controller
 		$proposal_kbmi_set = $this->proposal_model->list_by_mahasiswa($this->session->user->mahasiswa->id, PROGRAM_KBMI);
 		$proposal_startup_set = $this->proposal_model->list_by_mahasiswa($this->session->user->mahasiswa->id, PROGRAM_STARTUP);
 		$meeting_set = $this->meeting_model->list_by_mahasiswa($this->session->user->mahasiswa->id);
+
+		// Pengecekan Lolos Tahap 2
+		foreach ($proposal_startup_set as $proposal_startup)
+		{
+			$proposal_startup->is_lolos_tahap_2 = $this->proposal_model->is_lolos_tahapan(
+				$proposal_startup->id, TAHAPAN_EVALUASI_TAHAP_2);
+		}
 		
 		$this->smarty->assign('kegiatan_kbmi', $kegiatan_kbmi);
 		$this->smarty->assign('kegiatan_startup', $kegiatan_startup);

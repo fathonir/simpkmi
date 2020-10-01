@@ -143,6 +143,7 @@
 								<th>Pitchdeck</th>
 								<th>Presentasi</th>
 								<th>Produk</th>
+								<th>Pitckdeck Tahap 2</th>
 								<th style="width: 1%;"></th>
 							</tr>
 						</thead>
@@ -172,24 +173,36 @@
 											<span class="label label-default">Belum Ada</span>
 										{/if}
 									</td>
+									<td>
+										{if $proposal_startup->is_lolos_tahap_2 == true}
+											{if $proposal_startup->file_pitchdeck_2 != ''}
+												<a href="{base_url()}../upload/lampiran/{$proposal_startup->file_pitchdeck_2}" target="_blank"><i class="glyphicon glyphicon-paperclip"></i></a>
+											{else}
+												<span class="label label-default">Belum Upload</span>
+											{/if}
+										{/if}
+									</td>
 									<td style="white-space: nowrap">
 										<a href="{site_url('startup/update')}/{$proposal_startup->id}" class="btn btn-success">Unggah</a>
 										{if $proposal_startup->is_submited == 0}
 											<a href="{site_url('startup/submit')}/{$proposal_startup->id}" class="btn btn-primary">Submit</a>
 										{/if}
+										{if $proposal_startup->is_lolos_tahap_2 == true}
+											<a href="{site_url('startup/pitchdeck-2')}" class="btn btn-success">Unggah Pitchdeck Tahap 2</a>
+										{/if}
 									</td>
 								</tr>
 							{foreachelse}
 								<tr>
-									<td colspan="6"><i>Tidak ada judul terdaftar</i></td>
+									<td colspan="7"><i>Tidak ada judul terdaftar</i></td>
 								</tr>
 							{/foreach}
 						</tbody>
 					</table>
+					<p>* Pitchdeck Tahap 2 Wajib di upload bagi yang Lolos Tahap 2</p>
+					<p>** Pitchdeck Tahap 2 di upload maksimal Tanggal <strong>01 Oktober 2020 Jam 23:59</strong></p>
 				</div>
 			</div>
-
-			
 			
 		</div>
 	</div>

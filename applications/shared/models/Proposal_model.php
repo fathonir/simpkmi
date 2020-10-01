@@ -177,6 +177,11 @@ class Proposal_model extends CI_Model
 			->select('fp.nama_file')->from('file_proposal fp')
 			->join('syarat s', 's.id = fp.syarat_id and s.syarat = \'Produk\'')
 			->where('fp.proposal_id = p.id')->get_compiled_select();
+
+		$select_file_pitchdeck_2 = $this->db
+			->select('fp.nama_file')->from('file_proposal fp')
+			->join('syarat s', 's.id = fp.syarat_id and s.syarat = \'Pitchdeck Tahap 2\'')
+			->where('fp.proposal_id = p.id')->get_compiled_select();
 		
 		return $this->db
 			->select('p.id, k.tahun, p.judul, p.is_submited')
@@ -184,6 +189,7 @@ class Proposal_model extends CI_Model
 			->select("({$select_file_pitchdeck}) as file_pitchdeck", FALSE)
 			->select("({$select_link_presentasi}) as link_presentasi", FALSE)
 			->select("({$select_link_produk}) as link_produk", FALSE)
+			->select("({$select_file_pitchdeck_2}) as file_pitchdeck_2", FALSE)
 			->from('mahasiswa m')
 			->join('anggota_proposal ap', 'ap.mahasiswa_id = m.id AND ap.no_urut = 1') // Ketua di No Urut 1
 			->join('proposal p', 'p.id = ap.proposal_id')
@@ -571,5 +577,14 @@ class Proposal_model extends CI_Model
 			->join('dosen d', 'd.id = p.dosen_id', 'LEFT')
 			->where('kegiatan_id', $kegiatan_id)
 			->get()->result();
+	}
+
+	function is_lolos_tahapan($proposal_id, $tahapan_id)
+	{
+		$count = $this->db
+			->from('tahapan_proposal')
+			->where(['proposal_id' => $proposal_id, 'tahapan_id' => $tahapan_id])
+			->count_all_results();
+		return ($count > 0);
 	}
 }

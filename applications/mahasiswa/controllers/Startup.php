@@ -210,4 +210,85 @@ class Startup extends Mahasiswa_Controller
 		
 		$this->smarty->display();
 	}
+
+	function pitchdeck_2()
+	{
+		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_STARTUP);
+		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
+
+		// Pengecekan proposal lolos tahap 2
+		if ( ! $this->proposal_model->is_lolos_tahapan($proposal->id, TAHAPAN_EVALUASI_TAHAP_2))
+		{
+			redirect('home');
+			exit();
+		}
+
+		$nama_syarat_pitchdeck_2 = 'Pitchdeck Tahap 2';
+		$syarat = $this->syarat_model->get_by_nama($kegiatan->id, $nama_syarat_pitchdeck_2, $proposal->id);
+
+		// Saat Upload
+		if ($this->input->method() == 'post')
+		{
+			$this->load->library('upload');
+
+			$file_row_exist = $this->db->where(array(
+					'proposal_id' => $proposal->id,
+					'syarat_id' => $syarat->id
+				))->count_all_results('file_proposal') > 0;
+
+			// Hanya di proses ketika tidak kosong
+			if (isset($_FILES['file_syarat_' . $syarat->id]))
+			{
+				$this->upload->initialize([
+					'encrypt_name'	=> TRUE,
+					'upload_path'	=> FCPATH.'upload/lampiran/',
+					'allowed_types'	=> explode(',', $syarat->allowed_types),
+					'max_size'		=> (int)$syarat->max_size * 1024
+				]);
+
+				if ($this->upload->do_upload('file_syarat_' . $syarat->id))
+				{
+					$data = $this->upload->data();
+
+					if ($file_row_exist)
+					{
+						$this->db->update('file_proposal', array(
+							'nama_asli' => $data['orig_name'],
+							'nama_file' => $data['file_name'],
+							'updated_at' => date('Y-m-d H:i:s')
+						), array('proposal_id' => $proposal->id, 'syarat_id' => $syarat->id));
+					}
+					else // insert
+					{
+						$this->db->insert('file_proposal', array(
+							'proposal_id' => $proposal->id,
+							'nama_asli' => $data['orig_name'],
+							'nama_file' => $data['file_name'],
+							'syarat_id' => $syarat->id
+						));
+
+						$syarat->file_proposal_id = $this->db->insert_id();
+					}
+
+					$syarat->nama_asli = $data['orig_name'];
+					$syarat->nama_file = $data['file_name'];
+				}
+				else
+				{
+					if ($this->upload->display_errors('', '') == 'You did not select a file to upload.' && $syarat->is_wajib == 0)
+					{
+						// Jika tidak wajib, maka tidak diperlukan file untuk upload
+					}
+					else
+					{
+						$syarat->upload_error_msg = $this->upload->display_errors('', '');
+					}
+				}
+			}
+		}
+
+		$this->smarty->assign('syarat', $syarat);
+		$this->smarty->assign('proposal', $proposal);
+		$this->smarty->display();
+	}
 }
