@@ -21,7 +21,7 @@ class File_proposal_model extends CI_Model
 	public function list_by_proposal($proposal_id)
 	{
 		return $this->db
-			->select('fp.*, s.syarat')
+			->select('fp.*, s.syarat, s.is_upload')
 			->join('syarat s', 's.id = fp.syarat_id')
 			->get_where('file_proposal fp', ['fp.proposal_id' => $proposal_id])
 			->result();

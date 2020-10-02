@@ -55,7 +55,7 @@
 					<label class="col-md-2 col-sm-3 control-label">File Upload</label>
 					<div class="col-md-8 col-sm-7">
 						{foreach $file_proposal_set as $file_proposal}
-							{if $file_proposal->syarat == 'Pitchdeck'}
+							{if $file_proposal->is_upload}
 								<p class="form-control-static" style="min-height: 0; padding: 2px 0">{$file_proposal->syarat} - <a href="{base_url()}../upload/lampiran/{$file_proposal->nama_file}" target="_blank">{$file_proposal->nama_file}</a></p>
 							{else}
 								<p class="form-control-static" style="min-height: 0; padding: 2px 0">{$file_proposal->syarat} - <a href="{$file_proposal->nama_file}" target="_blank">{$file_proposal->nama_file}</a></p>
