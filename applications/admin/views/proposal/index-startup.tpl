@@ -33,6 +33,7 @@
 						<th class="text-center">Pitchdeck</th>
 						<th class="text-center">Presentasi</th>
 						<th class="text-center">Produk</th>
+						<th class="text-center">Pitchdeck 2</th>
 						<th>Status</th>
 					</tr>
 				</thead>
@@ -64,6 +65,11 @@
 									{/if}
 								</td>
 								<td class="text-center">
+									{if $data->file_pitchdeck_2 != ''}
+										<a href="{base_url()}../upload/lampiran/{$data->file_pitchdeck_2}" target="_blank"><i class="glyphicon glyphicon-paperclip"></i></a>
+									{/if}
+								</td>
+								<td class="text-center">
 									{if $data->is_reviewed == TRUE}
 										<label class="label label-primary">Direview</label>
 									{else if $data->is_submited == TRUE}
@@ -75,7 +81,7 @@
 							</tr>
 						{foreachelse}
 							<tr>
-								<td colspan="6">Tidak ada data ditemukan</td>
+								<td colspan="7">Tidak ada data ditemukan</td>
 							</tr>
 						{/foreach}
 					{/if}
