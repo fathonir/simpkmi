@@ -504,4 +504,93 @@ class Kbmi extends Mahasiswa_Controller
 	{
 		$this->smarty->display();
 	}
+
+	public function upload_kemajuan()
+	{
+		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_KBMI);
+
+		// If expired, redirect ke home
+		if (time() < strtotime($kegiatan->tgl_awal_upload_kemajuan) || strtotime($kegiatan->tgl_akhir_upload_kemajuan) < time())
+		{
+			redirect('home'); exit();
+		}
+
+		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
+		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id, $proposal->id, [
+			'Kemajuan', 'Bukti Pembelanjaan', 'Bukti Kegiatan'
+		]);
+
+		if ($this->input->post('tombol') == 'Simpan')
+		{
+			$proposal->dana_dipakai_t1 = (int)str_replace('.', '', $this->input->post('dana_dipakai_t1'));
+			$proposal->updated_at = date('Y-m-d H:i:s');
+			$this->proposal_model->update($proposal->id, $proposal);
+
+			$this->session->set_flashdata('simpan_success', true);
+
+			redirect('kbmi/upload-kemajuan');
+			exit();
+		}
+
+		if ($this->input->post('tombol') == 'Unggah')
+		{
+			$this->load->library('upload');
+
+			foreach ($syarat_set as &$syarat)
+			{
+				$this->upload->initialize([
+					'encrypt_name'	=> TRUE,
+					'upload_path'	=> FCPATH.'upload/lampiran/',
+					'allowed_types'	=> explode(',', $syarat->allowed_types),
+					'max_size'		=> (int)$syarat->max_size * 1024
+				]);
+
+				if ($this->upload->do_upload('file_syarat_' . $syarat->id))
+				{
+					$data = $this->upload->data();
+
+					$file_row_exist = $this->db->where(array(
+							'proposal_id' => $proposal->id,
+							'syarat_id' => $syarat->id
+						))->count_all_results('file_proposal') > 0;
+
+					// if file record exist : update
+					if ($file_row_exist)
+					{
+						$this->db->update('file_proposal', array(
+							'nama_asli' => $data['orig_name'],
+							'nama_file' => $data['file_name']
+						), array('proposal_id' => $proposal->id, 'syarat_id' => $syarat->id));
+					}
+					else // insert
+					{
+						$this->db->insert('file_proposal', array(
+							'proposal_id' => $proposal->id,
+							'nama_asli' => $data['orig_name'],
+							'nama_file' => $data['file_name'],
+							'syarat_id' => $syarat->id
+						));
+					}
+				}
+				else
+				{
+					if ($this->upload->display_errors('', '') == 'You did not select a file to upload.' && $syarat->is_wajib == 0)
+					{
+						// Jika tidak wajib, maka tidak diperlukan file untuk upload
+					}
+					else
+					{
+						$syarat->upload_error_msg = $this->upload->display_errors('', '');
+					}
+				}
+			}
+
+			redirect('kbmi/upload-kemajuan');
+			exit();
+		}
+
+		$this->smarty->assign('syarat_set', $syarat_set);
+		$this->smarty->assign('proposal', $proposal);
+		$this->smarty->display();
+	}
 }

@@ -103,7 +103,11 @@
 									<td><span class="label label-info">3</span></td>
 									<td>
 										{if $proposal_kbmi->is_submited}
-											<span class="label label-success">Sudah Submit</span>
+											{if $proposal_kbmi->is_didanai}
+												<span class="label label-success">Didanai</span>
+											{else}
+												<span class="label label-success">Sudah Submit</span>
+											{/if}
 										{else}
 											<span class="label label-default">Belum Submit</span>
 										{/if}
@@ -115,6 +119,11 @@
 												<a href="{site_url('kbmi/identitas')}" class="btn btn-primary btn-xs">
 													<i class="glyphicon glyphicon-pencil"></i> Identitas Proposal
 												</a>
+												{if $proposal_kbmi->is_didanai}
+													<a href="{site_url('kbmi/upload-kemajuan')}" class="btn btn-primary btn-xs">
+														<i class="glyphicon glyphicon-upload"></i> Upload Kemajuan
+													</a>
+												{/if}
 											{/if}
 										{/if}
 									</td>

@@ -184,7 +184,7 @@ class Proposal_model extends CI_Model
 			->where('fp.proposal_id = p.id')->get_compiled_select();
 		
 		return $this->db
-			->select('p.id, k.tahun, p.judul, p.is_submited')
+			->select('p.id, k.tahun, p.judul, p.is_submited, p.is_didanai')
 			->select("({$select_isian_proposal_count}) as isian_proposal", FALSE)
 			->select("({$select_file_pitchdeck}) as file_pitchdeck", FALSE)
 			->select("({$select_link_presentasi}) as link_presentasi", FALSE)

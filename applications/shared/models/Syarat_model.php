@@ -16,12 +16,25 @@ class Syarat_model extends CI_Model
 {
 	/**
 	 * @param int $kegiatan_id
+	 * @param int $proposal_id
+	 * @param array $filter_include Filter nama syarat apa saja yang disertakan
+	 * @param array $filter_exclude Filter nama syarat apa saja yang tidak boleh muncul
 	 * @return Syarat_model[]
 	 */
-	public function list_by_kegiatan($kegiatan_id, $proposal_id = 0)
+	public function list_by_kegiatan($kegiatan_id, $proposal_id = 0, $filter_include = null, $filter_exclude = null)
 	{
 		if ($proposal_id != 0)
 		{
+			if (is_array($filter_include))
+			{
+				$this->db->where_in('s.syarat', $filter_include);
+			}
+
+			if (is_array($filter_exclude))
+			{
+				$this->db->where_not_in('s.syarat', $filter_exclude);
+			}
+
 			return $this->db
 				->select('s.id, s.syarat, s.keterangan, s.is_wajib, s.allowed_types, s.max_size, s.is_aktif, s.is_upload')
 				->select('fp.id as file_proposal_id, fp.nama_file, fp.nama_asli')
