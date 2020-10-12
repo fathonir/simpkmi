@@ -85,6 +85,24 @@
 							<input type="text" name="pengumuman_HMS" value="{$data->tgl_pengumuman|date_format:"%H:%M:%S"}" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
 						</div>
 					</div>
+
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="tgl_awal_upload_kemajuan">Tgl Awal Upload Kemajuan</label>
+						<div class="col-md-5">
+							{html_select_date field_order="DMY" prefix="awal_upload_kemajuan_" time=$data->tgl_awal_upload_kemajuan year_as_text=true all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
+							<input type="text" name="awal_upload_kemajuan_HMS" value="{$data->tgl_awal_upload_kemajuan|date_format:"%H:%M:%S"}" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
+						</div>
+					</div>
+
+					<!-- Text input-->
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="tgl_akhir_upload_kemajuan">Tgl Akhir Upload Kemajuan</label>
+						<div class="col-md-5">
+							{html_select_date field_order="DMY" prefix="akhir_upload_kemajuan_" time=$data->tgl_akhir_upload_kemajuan year_as_text=true all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
+							<input type="text" name="akhir_upload_kemajuan_HMS" value="{$data->tgl_akhir_upload_kemajuan|date_format:"%H:%M:%S"}" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
+						</div>
+					</div>
 						
 					<!-- Select Box -->
 					<div class="form-group">

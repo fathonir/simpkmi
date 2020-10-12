@@ -27,12 +27,18 @@ class Kegiatan_model extends CI_Model
 		$kegiatan->tahun			= $this->input->post('tahun');
 		$kegiatan->proposal_per_pt	= $this->input->post('proposal_per_pt');
 		$kegiatan->peserta_per_pt	= $this->input->post('peserta_per_pt');
-		$kegiatan->tgl_awal_upload	= "{$post['awal_upload_Year']}-{$post['awal_upload_Month']}-{$post['awal_upload_Day']} {$post['awal_upload_time']}";
-		$kegiatan->tgl_akhir_upload	= "{$post['akhir_upload_Year']}-{$post['akhir_upload_Month']}-{$post['akhir_upload_Day']} {$post['akhir_upload_time']}";
-		$kegiatan->tgl_awal_review	= "{$post['awal_review_Year']}-{$post['awal_review_Month']}-{$post['awal_review_Day']} {$post['awal_review_time']}";
-		$kegiatan->tgl_akhir_review	= "{$post['akhir_review_Year']}-{$post['akhir_review_Month']}-{$post['akhir_review_Day']} {$post['akhir_review_time']}";
-		$kegiatan->tgl_pengumuman	= "{$post['pengumuman_Year']}-{$post['pengumuman_Month']}-{$post['pengumuman_Day']} {$post['pengumuman_time']}";
-		
+		$kegiatan->tgl_awal_upload	= "{$post['awal_upload_Year']}-{$post['awal_upload_Month']}-{$post['awal_upload_Day']} {$post['awal_upload_HMS']}";
+		$kegiatan->tgl_akhir_upload	= "{$post['akhir_upload_Year']}-{$post['akhir_upload_Month']}-{$post['akhir_upload_Day']} {$post['akhir_upload_HMS']}";
+		$kegiatan->tgl_awal_review	= "{$post['awal_review_Year']}-{$post['awal_review_Month']}-{$post['awal_review_Day']} {$post['awal_review_HMS']}";
+		$kegiatan->tgl_akhir_review	= "{$post['akhir_review_Year']}-{$post['akhir_review_Month']}-{$post['akhir_review_Day']} {$post['akhir_review_HMS']}";
+		$kegiatan->tgl_pengumuman	= "{$post['pengumuman_Year']}-{$post['pengumuman_Month']}-{$post['pengumuman_Day']} {$post['pengumuman_HMS']}";
+		$kegiatan->tgl_awal_upload_kemajuan =
+			"{$post['awal_upload_kemajuan_Year']}-{$post['awal_upload_kemajuan_Month']}-" .
+			"{$post['awal_upload_kemajuan_Day']} {$post['awal_upload_kemajuan_HMS']}";
+		$kegiatan->tgl_akhir_upload_kemajuan =
+			"{$post['akhir_upload_kemajuan_Year']}-{$post['akhir_upload_kemajuan_Month']}-" .
+			"{$post['akhir_upload_kemajuan_Day']} {$post['akhir_upload_kemajuan_HMS']}";
+
 		// insert ke database
 		$this->db->insert('kegiatan', $kegiatan);
 		
@@ -54,6 +60,12 @@ class Kegiatan_model extends CI_Model
 		$kegiatan->tgl_awal_review	= "{$post['awal_review_Year']}-{$post['awal_review_Month']}-{$post['awal_review_Day']} {$post['awal_review_HMS']}";
 		$kegiatan->tgl_akhir_review	= "{$post['akhir_review_Year']}-{$post['akhir_review_Month']}-{$post['akhir_review_Day']} {$post['akhir_review_HMS']}";
 		$kegiatan->tgl_pengumuman	= "{$post['pengumuman_Year']}-{$post['pengumuman_Month']}-{$post['pengumuman_Day']} {$post['pengumuman_HMS']}";
+		$kegiatan->tgl_awal_upload_kemajuan =
+			"{$post['awal_upload_kemajuan_Year']}-{$post['awal_upload_kemajuan_Month']}-" .
+			"{$post['awal_upload_kemajuan_Day']} {$post['awal_upload_kemajuan_HMS']}";
+		$kegiatan->tgl_akhir_upload_kemajuan =
+			"{$post['akhir_upload_kemajuan_Year']}-{$post['akhir_upload_kemajuan_Month']}-" .
+			"{$post['akhir_upload_kemajuan_Day']} {$post['akhir_upload_kemajuan_HMS']}";
 		$kegiatan->is_aktif			= $this->input->post('is_aktif');
 		
 		$this->db->update('kegiatan', $kegiatan, ['id' => $id]);
