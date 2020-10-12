@@ -143,30 +143,30 @@ class Kbmi extends Mahasiswa_Controller
 			echo json_encode(['result' => $update_result]);
 		}
 	}
-    
-    public function cari_dosen()
-    {
-        try
-        {
-            $dosen = $this->dosen_model->get_by_nidn(
-                $this->session->perguruan_tinggi->npsn,
-                $this->input->post('program_studi_id'),
-                $this->input->post('nidn'));
 
-            if ($dosen != NULL)
-            {
-                echo json_encode(['result' => true, 'dosen' => $dosen]);
-                exit();
-            }
-        }
-        catch (Exception $exc)
-        {
-            echo json_encode(['result' => false, 'message' => $exc->getMessage()]);
-            exit();
-        }
+	public function cari_dosen()
+	{
+		try
+		{
+			$dosen = $this->dosen_model->get_by_nidn(
+				$this->session->perguruan_tinggi->npsn,
+				$this->input->post('program_studi_id'),
+				$this->input->post('nidn'));
 
-        echo json_encode(['result' => false, 'message' => 'Dosen tidak ditemukan']);
-    }
+			if ($dosen != NULL)
+			{
+				echo json_encode(['result' => true, 'dosen' => $dosen]);
+				exit();
+			}
+		}
+		catch (Exception $exc)
+		{
+			echo json_encode(['result' => false, 'message' => $exc->getMessage()]);
+			exit();
+		}
+
+		echo json_encode(['result' => false, 'message' => 'Dosen tidak ditemukan']);
+	}
 	
 	public function update_dosen()
 	{
@@ -180,8 +180,8 @@ class Kbmi extends Mahasiswa_Controller
 			echo json_encode(['result' => $update_result]);
 		}
 	}
-    
-    public function step($step)
+
+	public function step($step)
 	{
 		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_KBMI);
 		$isian = $this->isian_model->get_single($kegiatan->id, $step);
