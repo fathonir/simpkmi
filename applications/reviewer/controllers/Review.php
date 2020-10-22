@@ -518,11 +518,23 @@ class Review extends Reviewer_Controller
 		$this->smarty->assign('preview_url', $preview_url);
 		
 		$this->smarty->assign('penilaian_set', $penilaian_set);
-		
-		$skor_set = $this->db
-			->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)
-			->where('is_aktif', 1)
-			->get('skor')->result_array();
+
+		// Khusus Monev KBMI 2020 pakai format 1-3
+		if ($proposal->kegiatan_id == 14)
+		{
+			$skor_set = $this->db
+				->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)
+				->where('skala_skor_id', SKALA_SKOR_1_3)
+				->get('skor')->result_array();
+		}
+		else
+		{
+			$skor_set = $this->db
+				->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)
+				->where('skala_skor_id', SKALA_SKOR_1_7)
+				->get('skor')->result_array();
+		}
+
 		$this->smarty->assign('skor_option_set', array_column($skor_set, 'keterangan', 'skor'));
 		
 		$this->smarty->display();

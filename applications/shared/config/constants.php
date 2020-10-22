@@ -61,3 +61,8 @@ define('TAHAPAN_KMI_AWARD', 4);
 define('TAHAPAN_STAN_EXPO', 5);
 define('TAHAPAN_STARTUP_SUMMIT', 6);
 define('TAHAPAN_EVALUASI_TAHAP_2', 7);
+
+// Skala Skor
+define('SKALA_SKOR_1_7', 1);
+define('SKALA_SKOR_1_5', 2);
+define('SKALA_SKOR_1_3', 3);
