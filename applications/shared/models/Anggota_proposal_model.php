@@ -20,7 +20,11 @@ class Anggota_proposal_model extends CI_Model
 		
 		return $result;
 	}
-	
+
+	/**
+	 * @param $id
+	 * @return Anggota_proposal_model|null
+	 */
 	public function get($id)
 	{
 		return $this->db->get_where('anggota_proposal', ['id' => $id], 1)->row();
@@ -42,7 +46,11 @@ class Anggota_proposal_model extends CI_Model
 		
 		return ($count > 0);
 	}
-	
+
+	/**
+	 * @param $proposal_id
+	 * @return Anggota_proposal_model|null
+	 */
 	public function get_ketua($proposal_id)
 	{
 		return $this->db->get_where('anggota_proposal', ['proposal_id' => $proposal_id, 'no_urut' => 1], 1)->row();
