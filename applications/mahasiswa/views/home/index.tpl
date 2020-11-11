@@ -91,7 +91,7 @@
 								<th>Kelengkapan</th>
 								<th>Upload</th>
 								<th>Status</th>
-								<th></th>
+								<th>Aksi</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -100,7 +100,7 @@
 									<td>{$proposal_kbmi->tahun}</td>
 									<td>{$proposal_kbmi->judul|htmlentities}</td>
 									<td><span class="badge">{$proposal_kbmi->isian_proposal}</span> dari <span class="badge">31</span></td>
-									<td><span class="label label-info">3</span></td>
+									<td><span class="label label-info"></span></td>
 									<td>
 										{if $proposal_kbmi->is_submited}
 											{if $proposal_kbmi->is_didanai}
@@ -126,17 +126,70 @@
 												{/if}
 											{/if}
 										{/if}
+										{* Tombol ajukan ke Expo *}
+										{if $kegiatan_expo != NULL}
+											<a href="{site_url('expo/register-from-kbmi')}/{$proposal_kbmi->id}" class="btn btn-success btn-xs">
+												<i class="glyphicon glyphicon-export"></i> Daftar Expo
+											</a>
+										{/if}
 									</td>
 								</tr>
 							{foreachelse}
 								<tr>
-									<td colspan="5"><i>Tidak ada judul terdaftar</i></td>
+									<td colspan="6"><i>Tidak ada judul terdaftar</i></td>
 								</tr>
 							{/foreach}
 						</tbody>
 					</table>
 				</div>
 			</div>
+
+			<h3>Program EXPO</h3>
+			{if $kegiatan_expo != NULL}
+				<p>Program Berjalan : {$kegiatan_expo->tahun}.
+					Mulai unggah <strong>{strftime('%d %B %Y %H:%M:%S', strtotime($kegiatan_expo->tgl_awal_upload))}</strong>
+					sampai <strong>{strftime('%d %B %Y %H:%M:%S', strtotime($kegiatan_expo->tgl_akhir_upload))}</strong></p>
+			{/if}
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th style="width: 1%">Tahun</th>
+							<th>Judul</th>
+							<th>Upload</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody>
+						{foreach $proposal_expo_set as $proposal_expo}
+							<tr>
+								<td>{$proposal_expo->tahun}</td>
+								<td>{$proposal_expo->judul|htmlentities}</td>
+								<td>
+									{if $proposal_expo->is_submited}
+										{if $proposal_expo->is_didanai}
+											<span class="label label-success">Didanai</span>
+										{else}
+											<span class="label label-success">Sudah Submit</span>
+										{/if}
+									{else}
+										<span class="label label-default">Belum Submit</span>
+									{/if}
+								</td>
+								<td></td>
+							</tr>
+							{foreachelse}
+							<tr>
+								<td colspan="5"><i>Tidak ada judul terdaftar</i></td>
+							</tr>
+						{/foreach}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
 
 			<h3>Program Akselerasi Startup</h3>
 			{if $kegiatan_startup != NULL}
