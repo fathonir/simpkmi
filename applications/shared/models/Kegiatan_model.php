@@ -4,7 +4,7 @@
  * @author Fathoni <m.fathoni@mail.com>
  * @property CI_DB_query_builder $db 
  * @property CI_Input $input
- * 
+ * @property Program_model $program
  * @property int $id 
  * @property int $program_id
  * @property int $tahun
@@ -184,6 +184,11 @@ class Kegiatan_model extends CI_Model
 		return $this->get_by_tahun($program_id, $tahun);
 	}
 
+	/**
+	 * @param int $program_id
+	 * @param int $tahun
+	 * @return Kegiatan_model
+	 */
 	public function get_by_tahun($program_id, $tahun)
 	{
 		return $this->db->get_where('kegiatan', [
