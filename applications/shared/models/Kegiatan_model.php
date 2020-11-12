@@ -177,8 +177,14 @@ class Kegiatan_model extends CI_Model
 	 * @param int $program_id
 	 * @param int $tahun
 	 * @return Kegiatan_model
+	 * @deprecated Gunakan get_by_tahun()
 	 */
 	public function get_by_program($program_id, $tahun)
+	{
+		return $this->get_by_tahun($program_id, $tahun);
+	}
+
+	public function get_by_tahun($program_id, $tahun)
 	{
 		return $this->db->get_where('kegiatan', [
 			'program_id'	=> $program_id,
