@@ -17,6 +17,8 @@
  * @property Anggota_proposal_model[] $anggota_proposal_set
  * @property Dosen_model $dosen
  * @property Syarat_model $syarat_model
+ * @property bool is_kmi_award
+ * @property int kategori_id
  */
 class Proposal_model extends CI_Model
 {
