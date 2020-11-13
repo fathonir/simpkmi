@@ -15,6 +15,7 @@
 						<th>Urut</th>
 						<th>Syarat File</th>
 						<th>Keterangan</th>
+						<th>Jenis File</th>
 						<th>Wajib</th>
 						<th>Aktif</th>
 						<th></th>
@@ -26,6 +27,7 @@
 							<td class="text-center">{$data->urutan}</td>
 							<td>{$data->syarat}</td>
 							<td>{$data->keterangan}</td>
+							<td>{$data->allowed_types}</td>
 							<td class="text-center">{if $data->is_wajib}<span class="label label-primary">Wajib</span>{else}<span class="label label-default">Tidak Wajib</span>{/if}</td>
 							<td class="text-center">{if $data->is_aktif}<span class="label label-success">Aktif</span>{/if}</td>
 							<td>
