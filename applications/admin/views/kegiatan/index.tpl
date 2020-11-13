@@ -34,7 +34,7 @@
 								<td colspan="5" class="text-center">
 									<a href="{site_url("kegiatan/lokasi")}?kegiatan_id={$data->id}" class="btn btn-sm btn-default">Lokasi</a>
 								</td>
-                            {else if $data->program_id == PROGRAM_ONLINE_WORKSHOP}
+                            {elseif $data->program_id == PROGRAM_ONLINE_WORKSHOP}
                                 <td colspan="5" class="text-center">
 									<a href="{site_url("kegiatan/meeting")}?kegiatan_id={$data->id}" class="btn btn-sm btn-default">Jadwal Meeting</a>
 								</td>
@@ -47,7 +47,7 @@
 							{/if}
 							<td>
 								<a href="{site_url("kegiatan/update/{$data->id}")}" class="btn btn-xs btn-default">Edit</a>
-								{if $data->program_id != 4 and $data->program_id != 3}
+								{if $data->program_id != PROGRAM_WORKSHOP}
 									<a href="{site_url("kegiatan/syarat")}?kegiatan_id={$data->id}" class="btn btn-xs btn-warning">Syarat Upload</a>
 								{/if}
 							</td>
