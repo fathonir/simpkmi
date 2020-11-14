@@ -32,6 +32,30 @@ class LaporanPendampingan_model extends CI_Model
 		return $data_set;
 	}
 
+	/**
+	 * Mendapatkan judul-judul yang membutuhkan pelaporan pendampingan
+	 * @param $kegiatan_id
+	 * @return array|array[]|object|object[]
+	 */
+	public function list_by_kegiatan($kegiatan_id)
+	{
+		return $this->db
+			->select('p.id, pt.nama_pt, p.judul, dp.id as dosen_pendamping_id, d.nama as nama_dosen')
+			->from('proposal p')
+			->join('kegiatan k', 'k.id = p.kegiatan_id')
+			->join('perguruan_tinggi pt', 'pt.id = p.perguruan_tinggi_id')
+			->join('dosen_pendamping dp', 'dp.kegiatan_id = k.id and dp.perguruan_tinggi_id = pt.id', 'LEFT')
+			->join('dosen d', 'd.id = dp.dosen_id', 'LEFT')
+			->where('p.is_didanai', 1)
+			->where('p.kegiatan_id', $kegiatan_id)
+			->get()->result();
+	}
+
+	public function list_data($kegiatan_id)
+	{
+
+	}
+
 	public function get_single($dosen_id, $proposal_id, $tahapan_pendampingan_id)
 	{
 		return $this->db

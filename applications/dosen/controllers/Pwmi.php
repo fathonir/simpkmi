@@ -7,6 +7,7 @@
  * @property Anggota_proposal_model $anggota_model
  * @property Mahasiswa_model $mahasiswa_model
  * @property LaporanPendampingan_model $lap_pendampingan_model
+ * @property TahapanPendampingan_model $tpendampingan_model
  * @property Dosen_Pendamping_model $dosen_pendamping_model
  */
 class Pwmi extends Dosen_Controller
@@ -20,6 +21,7 @@ class Pwmi extends Dosen_Controller
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_model');
 		$this->load->model(MODEL_MAHASISWA, 'mahasiswa_model');
 		$this->load->model(MODEL_LAPORAN_PENDAMPINGAN, 'lap_pendampingan_model');
+		$this->load->model(MODEL_TAHAPAN_PENDAMPINGAN, 'tpendampingan_model');
 		$this->load->model(MODEL_DOSEN_PENDAMPING, 'dosen_pendamping_model');
 	}
 
@@ -31,11 +33,19 @@ class Pwmi extends Dosen_Controller
 		$ketua = $this->mahasiswa_model->get($this->anggota_model->get_ketua($proposal->id)->mahasiswa_id);
 		$lap_pendampingan_set = $this->lap_pendampingan_model->list_by_proposal($proposal_id, $kegiatan->id, $dosen->id);
 
+		$now = date('Y-m-d H:i:s');
+
+		foreach ($lap_pendampingan_set as $lap_pendampingan)
+		{
+			$lap_pendampingan->is_masa_laporan =
+				$lap_pendampingan->tgl_awal_laporan <= $now &&
+				$now <= $lap_pendampingan->tgl_akhir_laporan;
+		}
+
 		$this->smarty->assign('kegiatan', $kegiatan);
 		$this->smarty->assign('proposal', $proposal);
 		$this->smarty->assign('ketua', $ketua);
 		$this->smarty->assign('lap_pendampingan_set', $lap_pendampingan_set);
-		$this->smarty->assign('now', time());
 		$this->smarty->display();
 	}
 
@@ -46,6 +56,12 @@ class Pwmi extends Dosen_Controller
 		$dosen_pendamping = $this->dosen_pendamping_model->get_from_dosen($dosen->id, $kegiatan->id);
 		$proposal = $this->proposal_model->get_single($proposal_id);
 		$lap_pendampingan = $this->lap_pendampingan_model->get_single($dosen->id, $proposal_id, $tahapan_pendampingan_id);
+		$tahapan_pendampingan = $this->tpendampingan_model->get_single($tahapan_pendampingan_id);
+
+		$now = date('Y-m-d H:i:s');
+		$is_masa_laporan =
+			$tahapan_pendampingan->tgl_awal_laporan <= $now &&
+			$now <= $tahapan_pendampingan->tgl_akhir_laporan;
 
 		if ($this->input->method() == 'post')
 		{
@@ -129,6 +145,7 @@ class Pwmi extends Dosen_Controller
 
 		$this->smarty->assign('proposal', $proposal);
 		$this->smarty->assign('lap_pendampingan', $lap_pendampingan);
+		$this->smarty->assign('is_masa_laporan', $is_masa_laporan);
 		$this->smarty->display();
 	}
 

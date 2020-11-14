@@ -21,4 +21,17 @@ class TahapanPendampingan_model extends CI_Model
 
 		return $data;
 	}
+
+	public function list_by_kegiatan($kegiatan_id)
+	{
+		return $this->db
+			->order_by('tgl_awal_laporan')
+			->get_where('tahapan_pendampingan', ['kegiatan_id' => $kegiatan_id])
+			->result();
+	}
+
+	public function get_single($id)
+	{
+		return $this->db->get_where('tahapan_pendampingan', ['id' => $id], 1)->row();
+	}
 }

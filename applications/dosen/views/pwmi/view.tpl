@@ -52,8 +52,10 @@
 							{/if}
 						</td>
 						<td class="text-center">
-							{if strtotime($lap_pendampingan->tgl_awal_laporan) < $now and $now < strtotime($lap_pendampingan->tgl_akhir_laporan)}
+							{if $lap_pendampingan->is_masa_laporan}
 								<a class="btn btn-primary btn-sm" href="{site_url('pwmi/update/')}{$proposal->id}/{$lap_pendampingan->tahapan_pendampingan_id}">Update</a>
+							{else}
+								<a class="btn btn-primary btn-sm" href="{site_url('pwmi/update/')}{$proposal->id}/{$lap_pendampingan->tahapan_pendampingan_id}">Lihat</a>
 							{/if}
 						</td>
 					</tr>

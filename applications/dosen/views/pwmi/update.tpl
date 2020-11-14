@@ -42,15 +42,19 @@
 							<a href="{site_url('../upload/laporan-pendampingan')}/{$lap_pendampingan->attachment_nama_file}">
 								{$lap_pendampingan->attachment_nama_asli}
 							</a>
-							<a href="{site_url('pwmi/hapus-attachment')}/{$proposal->id}/{$lap_pendampingan->tahapan_pendampingan_id}" class="btn btn-xs btn-danger">
-								<i class="glyphicon glyphicon-remove"></i>
-							</a>
+							{if $is_masa_laporan}
+								<a href="{site_url('pwmi/hapus-attachment')}/{$proposal->id}/{$lap_pendampingan->tahapan_pendampingan_id}" class="btn btn-xs btn-danger">
+									<i class="glyphicon glyphicon-remove"></i>
+								</a>
+							{/if}
 						</p>
 					</div>
 				{/if}
 				<div class="form-group">
 					<a class="btn btn-default" href="{site_url('pwmi/view')}/{$proposal->id}">Kembali</a>
-					<input class="btn btn-primary" type="submit" value="Simpan"/>
+					{if $is_masa_laporan}
+						<input class="btn btn-primary" type="submit" value="Simpan"/>
+					{/if}
 				</div>
 			</form>
 		</div>
