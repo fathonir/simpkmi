@@ -39,7 +39,7 @@
 					<div class="form-group">
 						<label class="control-label">Foto atau Dokumen Pendukung Lainnya (pdf)</label>
 						<p class="form-control-static">
-							<a href="{site_url('../upload/laporan-pendampingan')}/{$lap_pendampingan->attachment_nama_file}">
+							<a href="{site_url('../../upload/laporan-pendampingan')}/{$lap_pendampingan->attachment_nama_file}">
 								{$lap_pendampingan->attachment_nama_asli}
 							</a>
 							{if $is_masa_laporan}
