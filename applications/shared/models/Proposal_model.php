@@ -364,6 +364,17 @@ class Proposal_model extends CI_Model
 			->where(['perguruan_tinggi_id' => $perguruan_tinggi_id, 'kegiatan_id' => $kegiatan_id])
 			->get()->result();
 	}
+
+	public function list_proposal_expo_by_tahun($perguruan_tinggi_id, $tahun)
+	{
+		return $this->db
+			->select('proposal.id, judul, nama_kategori, is_submited, is_didanai, is_ditolak, is_kmi_award')
+			->from('proposal')
+			->join('kegiatan', 'kegiatan.id = kegiatan_id')
+			->join('kategori', 'kategori.id = kategori_id')
+			->where(['perguruan_tinggi_id' => $perguruan_tinggi_id, 'kegiatan.tahun' => $tahun])
+			->get()->result();
+	}
 	
 	public function list_all_proposal_expo()
 	{
@@ -594,5 +605,21 @@ class Proposal_model extends CI_Model
 			->where(['proposal_id' => $proposal_id, 'tahapan_id' => $tahapan_id])
 			->count_all_results();
 		return ($count > 0);
+	}
+
+	/**
+	 * Hitung proposal KMI Award Umum
+	 * @param int $kegiatan_id
+	 * @param int $perguruan_tinggi_id
+	 * @return int
+	 */
+	function count_proposal_kmi_award_umum($kegiatan_id, $perguruan_tinggi_id)
+	{
+		return $this->db
+			->from('proposal')
+			->where('kegiatan_id', $kegiatan_id)
+			->where('perguruan_tinggi_id', $perguruan_tinggi_id)
+			->where('kegiatan_id_asal IS NULL', NULL, false)
+			->count_all_results();
 	}
 }

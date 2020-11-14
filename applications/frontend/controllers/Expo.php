@@ -8,7 +8,9 @@
  * @property Kegiatan_model $kegiatan_model
  * @property Program_model $program_model
  * @property Syarat_model $syarat_model
- * @property Anggota_proposal_model $anggota_proposal_model 
+ * @property Anggota_proposal_model $anggota_proposal_model
+ * @property Program_studi_model $program_studi_model
+ * @property Mahasiswa_model $mahasiswa_model
  */
 class Expo extends Frontend_Controller
 {
@@ -27,6 +29,8 @@ class Expo extends Frontend_Controller
 		$this->load->model(MODEL_PROGRAM, 'program_model');
 		$this->load->model(MODEL_SYARAT, 'syarat_model');
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_proposal_model');
+		$this->load->model(MODEL_PROGRAM_STUDI, 'program_studi_model');
+		$this->load->model(MODEL_MAHASISWA, 'mahasiswa_model');
 	}
 	
 	/**
@@ -34,18 +38,28 @@ class Expo extends Frontend_Controller
 	 */
 	public function index()
 	{
-		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_EXPO);
+		$tahun_set = ['2020' => '2020', '2019' => '2019', '2018' => '2018', '2017' => '2017'];
+		$this->smarty->assign('tahun_set', $tahun_set);
+
+		$tahun_selected = ($this->input->get('tahun') == '') ? date('Y') : $this->input->get('tahun');
+		$this->smarty->assign('tahun_selected', $tahun_selected);
+
+		$kegiatan = $this->kegiatan_model->get_by_tahun(PROGRAM_EXPO, $tahun_selected);
 		$kegiatan->program = $this->program_model->get_single($kegiatan->program_id);
+		$kegiatan->is_masa_upload =
+			(strtotime($kegiatan->tgl_awal_upload) < time()) &&
+			(time() < strtotime($kegiatan->tgl_akhir_upload));
+		$kegiatan->tgl_awal_upload_dmy = strftime('%d %B %Y %H:%M:%S', strtotime($kegiatan->tgl_awal_upload));
+		$kegiatan->tgl_akhir_upload_dmy = strftime('%d %B %Y %H:%M:%S', strtotime($kegiatan->tgl_akhir_upload));
 		$this->smarty->assign('kegiatan', $kegiatan);
 		
 		$file_expo = $this->file_expo_model->get_single($kegiatan->id, $this->session->perguruan_tinggi->id);
 		$this->smarty->assign('file_expo', $file_expo);
-		
-		if ($kegiatan != null)
-		{
-			$is_kegiatan_aktif = strtotime($kegiatan->tgl_awal_upload) < time() && time() < strtotime($kegiatan->tgl_akhir_upload);
-			$this->smarty->assign('is_kegiatan_aktif', $is_kegiatan_aktif);
-		}
+
+		// Hitung kategori Expo KMI Umum (Khusus Tahun 2020)
+		$jumlah_proposal_umum = $this->proposal_model->count_proposal_kmi_award_umum($kegiatan->id,
+			$this->session->perguruan_tinggi->id);
+		$this->smarty->assign('jumlah_proposal_umum', $jumlah_proposal_umum);
 		
 		if ($this->input->method() == 'post')
 		{
@@ -110,7 +124,7 @@ class Expo extends Frontend_Controller
 			exit();
 		}
 		
-		$data_set = $this->proposal_model->list_proposal_expo($this->session->perguruan_tinggi->id);
+		$data_set = $this->proposal_model->list_proposal_expo_by_tahun($this->session->perguruan_tinggi->id, $tahun_selected);
 		$this->smarty->assign('data_set', $data_set);
 		
 		$this->smarty->display();
@@ -162,16 +176,30 @@ class Expo extends Frontend_Controller
 	}
 	
 	public function add()
-	{	
+	{
+		$this->load->library('form_validation');
+		$this->load->library('upload');
+
+		$kategori_set = $this->db->get_where('kategori', ['program_id' => $this->session->program_id])->result();
+		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
+
+		// get kegiatan aktif
+		$kegiatan = $this->kegiatan_model->get_single($this->input->get('kegiatan_id'));
+		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id);
+
+		// get program studi
+		$program_studi_set = $this->program_studi_model->list_by_pt($this->session->perguruan_tinggi->npsn);
+		$this->smarty->assignForCombo('program_studi_set', $program_studi_set, 'id', 'nama');
+
 		if ($this->input->method() == 'post')
 		{
 			$now = date('Y-m-d H:i:s');
 
-			// Mendapatkan kegiatan expo yg aktif
-			$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_EXPO);
-			
+			/**
+			 * Pengecekan sebelum tahun 2020
 			// Cek Kategori apakah sudah ada KMI Award
-			$has_kmi_award = $this->proposal_model->has_kmi_award($kegiatan->id, $this->session->perguruan_tinggi->id, $this->input->post('kategori_id'));
+			$has_kmi_award = $this->proposal_model->has_kmi_award($kegiatan->id, $this->session->perguruan_tinggi->id,
+				$this->input->post('kategori_id'));
 			
 			if (($this->input->post('is_kmi_award') == '1') && $has_kmi_award)
 			{
@@ -186,65 +214,156 @@ class Expo extends Frontend_Controller
 
 				exit();
 			}
+			*/
 
-			$proposal = new stdClass();
-			$proposal->perguruan_tinggi_id	= $this->session->perguruan_tinggi->id;
-			$proposal->is_kmi_award			= ($this->input->post('is_kmi_award') == '1') ? 1 : 0 ;
-			$proposal->judul				= trim($this->input->post('judul'));
-			$proposal->kegiatan_id			= $kegiatan->id;
-			$proposal->kategori_id			= $this->input->post('kategori_id');
-			$proposal->nim_ketua			= trim($this->input->post('nim_ketua'));
-			$proposal->nama_ketua			= trim($this->input->post('nama_ketua'));
-			$proposal->created_at			= $now;
-
-			$this->db->insert('proposal', $proposal);
-
-			// get last insert id
-			$proposal->id = $this->db->insert_id();
-
-			// Proses anggota
-			for ($i = 1; $i <= 5; $i++)
+			// Validasi Isian
+			$this->form_validation->set_rules('judul', 'Nama Usaha', 'required');
+			$this->form_validation->set_rules('email', 'Email Usaha', 'required|valid_email');
+			$this->form_validation->set_rules('headline', 'Headline', 'required');
+			$this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
+			$this->form_validation->set_rules('link_web', 'Web', 'valid_url');
+			$this->form_validation->set_rules('link_instagram', 'Instagram', 'valid_url');
+			$this->form_validation->set_rules('link_twitter', 'Twitter', 'valid_url');
+			$this->form_validation->set_rules('link_youtube', 'Youtube', 'valid_url');
+			// Anggota min 3
+			for ($i = 1; $i <= 3; $i++)
 			{
-				if (trim($this->input->post('nim_anggota_'.$i)) != '' && trim($this->input->post('nama_anggota_'.$i)) != '')
-				{
-					$anggota				= new stdClass();
-					$anggota->proposal_id	= $proposal->id;
-					$anggota->no_urut		= $i;
-					$anggota->nim			= trim($this->input->post('nim_anggota_'.$i));
-					$anggota->nama			= trim($this->input->post('nama_anggota_'.$i));
-					$anggota->created_at	= $now;
+				$this->form_validation->set_rules("nim_anggota_{$i}", "NIM Anggota {$i}", 'required');
+				$this->form_validation->set_rules("nama_anggota_{$i}", "Nama Anggota {$i}", 'required');
+			}
 
-					$this->db->insert('anggota_proposal', $anggota);
+			// Validasi syarat
+			$syarat_has_error = FALSE;
+			foreach ($syarat_set as &$syarat)
+			{
+				$this->upload->initialize([
+					'encrypt_name'	=> TRUE,
+					'upload_path'	=> FCPATH.'upload/lampiran/',
+					'allowed_types'	=> explode(',', $syarat->allowed_types),
+					'max_size'		=> (int)$syarat->max_size * 1024
+				]);
+
+				if ($this->upload->do_upload('file_syarat_' . $syarat->id))
+				{
+					$data = $this->upload->data();
+
+					// Simpan informasi terupload, untuk pemrosesan setelah form_validation->run()
+					$file_syarat = new stdClass();
+					$file_syarat->syarat_id = $syarat->id;
+					$file_syarat->nama_file = $data['file_name'];
+					$file_syarat->nama_asli = $data['orig_name'];
+					$file_syarat->created_at = $now;
+					$file_syarat_set[] = $file_syarat;
+				}
+				else
+				{
+					if ($this->upload->display_errors('', '') == 'You did not select a file to upload.' && $syarat->is_wajib == 0)
+					{
+						// Jika tidak wajib, maka tidak diperlukan file untuk upload
+					}
+					else
+					{
+						$syarat->upload_error_msg = $this->upload->display_errors('', '');
+						$syarat_has_error = TRUE;
+					}
 				}
 			}
 
-			// set message
-			$this->session->set_flashdata('result', array(
-				'page_title' => 'Tambah usulan untuk ikut Expo KMI',
-				'message' => 'Penambahan sudah berhasil !',
-				'link_1' => '<a href="'.site_url('expo').'" class="alert-link">Kembali ke daftar Expo</a>'
-			));
+			if ($this->form_validation->run() && $syarat_has_error == FALSE)
+			{
+				$this->db->trans_begin();
 
-			redirect(site_url('alert/success'));
+				$proposal = new stdClass();
+				$proposal->kegiatan_id = $kegiatan->id;
+				$proposal->perguruan_tinggi_id = $this->session->perguruan_tinggi->id;
+				$proposal->is_kmi_award = ($this->input->post('is_kmi_award') == '1') ? 1 : 0;
+				$proposal->judul = trim($this->input->post('judul'));
+				$proposal->kategori_id = $this->input->post('kategori_id');
+				$proposal->email = $this->input->post('email');
+				$proposal->headline = $this->input->post('headline');
+				$proposal->deskripsi = $this->input->post('deskripsi');
+				$proposal->link_web = $this->input->post('link_web');
+				$proposal->link_instagram = $this->input->post('link_instagram');
+				$proposal->link_twitter = $this->input->post('link_twitter');
+				$proposal->link_youtube = $this->input->post('link_youtube');
+				$proposal->created_at = $now;
 
-			exit();
+				$this->db->insert('proposal', $proposal);
+
+				// get last insert id
+				$proposal->id = $this->db->insert_id();
+
+				// Proses anggota
+				for ($i = 1; $i <= 5; $i++)
+				{
+					// Jika tidak penuh pengisiannya
+					if ($this->input->post("nim_anggota_$i") == '' || $this->input->post("nama_anggota_$i") == '')
+					{
+						// skip proses
+						continue;
+					}
+
+					$anggota = new stdClass();
+					$anggota->proposal_id = $proposal->id;
+					$anggota->no_urut = $i;
+					$anggota->nim = $this->input->post("nim_anggota_$i");
+					$anggota->nama = $this->input->post("nama_anggota_$i");
+					$anggota->created_at = $now;
+					$this->db->insert('anggota_proposal', $anggota);
+				}
+
+				// Proses file syarat
+				foreach ($file_syarat_set as $file_syarat)
+				{
+					$file_syarat->proposal_id = $proposal->id;
+					$this->db->insert('file_proposal', $file_syarat);
+				}
+
+				// terjadi kegagalan insert data
+				if ($this->db->trans_status() === TRUE)
+				{
+					$this->db->trans_commit();
+
+					$this->session->set_flashdata('result', array(
+						'page_title' => 'Tambah usulan untuk ikut Expo KMI',
+						'message' => 'Penambahan sudah berhasil !',
+						'link_1' => anchor('expo', 'Kembali ke daftar expo', ['class' => 'alert-link'])
+					));
+
+					redirect(site_url('alert/success'));
+					exit();
+				}
+
+				$this->db->trans_rollback();
+			}
+
+			for ($i = 1; $i <= 3; $i++)
+			{
+				if (form_error("nim_anggota_$i") || form_error("nama_anggota_$i"))
+				{
+					$this->smarty->assign("error_anggota_$i", true);
+				}
+			}
+
 		}
-		
-		$kategori_set = $this->db->get_where('kategori', ['program_id' => $this->session->program_id])->result();
-		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
-		
-		// get kegiatan aktif
-		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_EXPO);
+
+		$this->smarty->assign('syarat_set', $syarat_set);
 		
 		$this->smarty->display();
 	}
 	
 	public function edit($id)
 	{
+		$this->load->library('form_validation');
+		$this->load->library('upload');
+
 		// memastikan id sesuai dengan pt (menghindari hack)
 		$proposal = $this->proposal_model->get_single($id, $this->session->perguruan_tinggi->id);
 		$proposal->anggota_proposal_set = $this->anggota_proposal_model->list_by_proposal($proposal->id);
 		$proposal->file_proposal_set = $this->file_proposal_model->list_by_proposal($proposal->id);
+
+		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, $proposal->id);
+		$this->smarty->assign('syarat_set', $syarat_set);
 		
 		if ($this->input->method() == 'post')
 		{
@@ -253,16 +372,21 @@ class Expo extends Frontend_Controller
 			$now = date('Y-m-d H:i:s');
 			
 			$proposal->is_kmi_award	= $this->input->post('is_kmi_award');
-			$proposal->judul		= $this->input->post('judul');
-			$proposal->kategori_id	= $this->input->post('kategori_id');
-			$proposal->nim_ketua	= $this->input->post('nim_ketua');
-			$proposal->nama_ketua	= $this->input->post('nama_ketua');
+			$proposal->judul = trim($this->input->post('judul'));
+			$proposal->kategori_id = $this->input->post('kategori_id');
+			$proposal->email = $this->input->post('email');
+			$proposal->headline = $this->input->post('headline');
+			$proposal->deskripsi = $this->input->post('deskripsi');
+			$proposal->link_web = $this->input->post('link_web');
+			$proposal->link_instagram = $this->input->post('link_instagram');
+			$proposal->link_twitter = $this->input->post('link_twitter');
+			$proposal->link_youtube = $this->input->post('link_youtube');
 			$proposal->updated_at	= $now;
 			
 			$this->proposal_model->update($proposal->id, $proposal);
 			
 			// Iterasi tiap isian anggota
-			for ($i = 1; $i <= 3; $i++)
+			for ($i = 1; $i <= 5; $i++)
 			{
 				// Jika isian tidak kosong, insert / update
 				if (trim($this->input->post('nim_anggota_'.$i)) != '' && trim($this->input->post('nama_anggota_'.$i)) != '')
@@ -329,7 +453,7 @@ class Expo extends Frontend_Controller
 		}
 		
 		// Iterasi tiap isian anggota
-		for ($i = 1; $i <= 3; $i++)
+		for ($i = 1; $i <= 5; $i++)
 		{
 			// Jika kosong set null
 			if ( ! isset($proposal->anggota_proposal_set[$i - 1]))
@@ -344,13 +468,6 @@ class Expo extends Frontend_Controller
 		
 		$kategori_set = $this->db->get_where('kategori', ['program_id' => $this->session->program_id])->result();
 		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
-		
-		// get kegiatan aktif
-		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_EXPO);
-		
-		// cek apa sudah terdapat usulan kmi award
-		$has_kmi_award = $this->proposal_model->has_kmi_award($kegiatan->id, $this->session->perguruan_tinggi->id);
-		$this->smarty->assign('has_kmi_award', $has_kmi_award);
 		
 		$this->smarty->display();
 	}
