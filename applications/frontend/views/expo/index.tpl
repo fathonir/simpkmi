@@ -97,8 +97,14 @@
 						<tr>
 							<td class="text-center">{$data@index + 1}</td>
 							<td>{$data->judul} {if $data->is_kmi_award}<span class="label label-primary">KMI Award</span>{/if}</td>
-							<td></td>
-							<td>{$data->nama_kategori}</td>
+							<td class="text-center">
+								{if $data->program_id_asal == PROGRAM_KBMI}
+									KBMI
+								{elseif $data->program_id_asal == PROGRAM_STARTUP}
+									ASMI
+								{/if}
+							</td>
+							<td class="text-center">{$data->nama_kategori}</td>
 							<td class="text-center">
 								{if $data->is_submited == 1}
 									{if $data->is_didanai == 1}
@@ -115,8 +121,14 @@
 							<td>
 								{if $kegiatan->is_aktif and $kegiatan->is_masa_upload and $data->is_submited == 0}
 									<a href="{site_url('expo/edit')}/{$data->id}" class="btn btn-xs btn-success">Edit</a>
+									{* Kalau dari KBMI / ASMI tidak bisa di hapus *}
+									{if $data->program_id_asal == ''}
 									<a href="{site_url('expo/hapus')}/{$data->id}" class="btn btn-xs btn-danger">Hapus</a>
-									<a href="{site_url('expo/submit')}/{$data->id}" class="btn btn-xs btn-primary">Ajukan Untuk Seleksi</a>
+									{/if}
+									<a href="{site_url('expo/submit')}/{$data->id}" class="btn btn-xs btn-primary">Submit untuk Seleksi</a>
+								{/if}
+								{if $kegiatan->is_aktif and $kegiatan->is_masa_upload and $data->is_submited}
+									<a href="{site_url('expo/unsubmit')}/{$data->id}" class="btn btn-xs btn-default">Batalkan Submit</a>
 								{/if}
 							</td>
 						</tr>
@@ -137,6 +149,7 @@
 					</ul>
 				</li>
 				<li>Informasi Status : <br/>
+					<span class="label label-default">Draft</span> : Usulan baru<br/>
 					<span class="label label-info">Seleksi Kelayakan</span> : Dalam proses seleksi oleh tim penilai.<br/>
 					<span class="label label-success">Ikut EXPO</span> : Usulan disetujui dan berhak mengikut Expo KMI<br/>
 					<span class="label label-danger">Ditolak</span> : Usulan tidak disetujui<br/>

@@ -17,8 +17,16 @@
  * @property Anggota_proposal_model[] $anggota_proposal_set
  * @property Dosen_model $dosen
  * @property Syarat_model $syarat_model
- * @property bool is_kmi_award
- * @property int kategori_id
+ * @property bool $is_kmi_award
+ * @property int $kategori_id
+ * @property int $kegiatan_id_asal
+ * @property string $email
+ * @property string $headline
+ * @property string $deskripsi
+ * @property string $link_web
+ * @property string $link_instagram
+ * @property string $link_twitter
+ * @property string $link_youtube
  */
 class Proposal_model extends CI_Model
 {
@@ -241,7 +249,12 @@ class Proposal_model extends CI_Model
 	public function get_single($id, $perguruan_tinggi_id = NULL)
 	{
 		$this->db->where(['id' => $id]);
-		if ($perguruan_tinggi_id != NULL) $this->db->where(['perguruan_tinggi_id' => $perguruan_tinggi_id]);
+
+		if ($perguruan_tinggi_id != NULL)
+		{
+			$this->db->where(['perguruan_tinggi_id' => $perguruan_tinggi_id]);
+		}
+
 		return $this->db->get('proposal', 1)->row();
 	}
 	
@@ -365,14 +378,16 @@ class Proposal_model extends CI_Model
 			->get()->result();
 	}
 
-	public function list_proposal_expo_by_tahun($perguruan_tinggi_id, $tahun)
+	public function list_proposal_expo_by_tahun($perguruan_tinggi_id, $kegiatan_id)
 	{
 		return $this->db
 			->select('proposal.id, judul, nama_kategori, is_submited, is_didanai, is_ditolak, is_kmi_award')
+			->select('k_asal.program_id as program_id_asal')
 			->from('proposal')
 			->join('kegiatan', 'kegiatan.id = kegiatan_id')
-			->join('kategori', 'kategori.id = kategori_id')
-			->where(['perguruan_tinggi_id' => $perguruan_tinggi_id, 'kegiatan.tahun' => $tahun])
+			->join('kategori', 'kategori.id = kategori_id', 'LEFT')
+			->join('kegiatan k_asal', 'k_asal.id = kegiatan_id_asal', 'LEFT')
+			->where(['perguruan_tinggi_id' => $perguruan_tinggi_id, 'kegiatan_id' => $kegiatan_id])
 			->get()->result();
 	}
 	
@@ -396,6 +411,14 @@ class Proposal_model extends CI_Model
 	{
 		return $this->db->update('proposal', [
 			'is_submited' => 1,
+			'updated_at' => date('Y-m-d H:i:s')
+		], ['id' => $id]);
+	}
+
+	public function unsubmit($id)
+	{
+		return $this->db->update('proposal', [
+			'is_submited' => 0,
 			'updated_at' => date('Y-m-d H:i:s')
 		], ['id' => $id]);
 	}

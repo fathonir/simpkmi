@@ -184,7 +184,7 @@
 					<div class="form-group">
 						<div class="col-lg-2"></div>
 						<div class="col-lg-10">
-							<input type="submit" value="Submit" class="btn btn-primary"/>
+							<input type="submit" value="Simpan" class="btn btn-primary"/>
 							<a href="{site_url('expo')}" class="btn btn-default">Kembali</a>
 						</div>
 					</div>

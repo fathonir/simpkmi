@@ -193,7 +193,9 @@
 									{if isset($syarat->upload_error_msg)}
 										<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
 									{/if}
-									<a class="btn btn-sm btn-default btn-cancel-edit" data-id="{$syarat->id}">Batal</a>
+									{if $syarat->file_proposal_id != ''}
+										<a class="btn btn-sm btn-default btn-cancel-edit" data-id="{$syarat->id}">Batal</a>
+									{/if}
 								</div>
 							</div>
 
@@ -215,7 +217,7 @@
 					<div class="form-group">
 						<div class="col-lg-2"></div>
 						<div class="col-lg-10">
-							<input type="submit" value="Submit" class="btn btn-primary"/>
+							<input type="submit" value="Simpan" class="btn btn-primary"/>
 							<a href="{site_url('expo')}" class="btn btn-default">Kembali</a>
 						</div>
 					</div>
