@@ -72,11 +72,11 @@
 			{if $kegiatan->is_masa_upload}
 				{if $kegiatan->tahun == 2020}
 					{if $kegiatan->proposal_per_pt == 0 or $jumlah_proposal_umum < $kegiatan->proposal_per_pt}
-						<p><a href="{site_url('expo/add')}?kegiatan_id={$kegiatan->id}" class="btn btn-primary">Tambah Usaha</a></p>
+						<p><a href="{site_url('expo/add')}?kegiatan_id={$kegiatan->id}" class="btn btn-primary">Tambah Usaha Kategori Umum</a></p>
 					{/if}
 				{else}
 					{if $kegiatan->proposal_per_pt == 0 or count($data_set) < $kegiatan->proposal_per_pt}
-						<p><a href="{site_url('expo/add')}?kegiatan_id={$kegiatan->id}" class="btn btn-primary">Tambah Usaha</a></p>
+						<p><a href="{site_url('expo/add')}?kegiatan_id={$kegiatan->id}" class="btn btn-primary">Tambah Usaha Kategori Umum</a></p>
 					{/if}
 				{/if}
 			{/if}
