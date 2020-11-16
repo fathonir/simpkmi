@@ -106,8 +106,11 @@
 						<div class="col-lg-2">
 							<input type="text" class="form-control" name="nim_anggota_1" placeholder="NIM / NPM" value="{set_value('nim_anggota_1')}">
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input type="text" class="form-control" name="nama_anggota_1" placeholder="Nama Mahasiswa" value="{set_value('nama_anggota_1')}">
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="hp_anggota_1" placeholder="No HP" value="{set_value('hp_anggota_1')}">
 						</div>
 					</div>
 
@@ -116,8 +119,11 @@
 						<div class="col-lg-2">
 							<input type="text" class="form-control" name="nim_anggota_2" placeholder="NIM / NPM" value="{set_value('nim_anggota_2')}">
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input type="text" class="form-control" name="nama_anggota_2" placeholder="Nama Mahasiswa" value="{set_value('nama_anggota_2')}">
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="hp_anggota_2" placeholder="No HP" value="{set_value('hp_anggota_2')}">
 						</div>
 					</div>
 						
@@ -126,8 +132,11 @@
 						<div class="col-lg-2">
 							<input type="text" class="form-control" name="nim_anggota_3" placeholder="NIM / NPM" value="{set_value('nim_anggota_3')}">
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input type="text" class="form-control" name="nama_anggota_3" placeholder="Nama Mahasiswa" value="{set_value('nama_anggota_3')}">
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="hp_anggota_3" placeholder="No HP" value="{set_value('hp_anggota_3')}">
 						</div>
 					</div>
 
@@ -136,8 +145,11 @@
 						<div class="col-lg-2">
 							<input type="text" class="form-control" name="nim_anggota_4" placeholder="NIM / NPM" value="{set_value('nim_anggota_4')}">
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input type="text" class="form-control" name="nama_anggota_4" placeholder="Nama Mahasiswa" value="{set_value('nama_anggota_4')}">
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="hp_anggota_4" placeholder="No HP" value="{set_value('hp_anggota_4')}">
 						</div>
 					</div>
 
@@ -146,8 +158,11 @@
 						<div class="col-lg-2">
 							<input type="text" class="form-control" name="nim_anggota_5" placeholder="NIM / NPM" value="{set_value('nim_anggota_5')}">
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input type="text" class="form-control" name="nama_anggota_5" placeholder="Nama Mahasiswa" value="{set_value('nama_anggota_5')}">
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" name="hp_anggota_5" placeholder="No HP" value="{set_value('hp_anggota_5')}">
 						</div>
 					</div>
 

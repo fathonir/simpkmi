@@ -63,7 +63,8 @@ class Anggota_proposal_model extends CI_Model
 	public function list_by_proposal($proposal_id)
 	{
 		return $this->db
-			->select('ap.id, ap.mahasiswa_id, coalesce(m.nim, ap.nim) as nim, coalesce(m.nama, ap.nama) as nama, m.program_studi_id, ps.nama as nama_program_studi')
+			->select('ap.id, ap.mahasiswa_id, coalesce(m.nim, ap.nim) as nim, coalesce(m.nama, ap.nama) as nama')
+			->select('ap.no_hp, m.program_studi_id, ps.nama as nama_program_studi')
 			->from('anggota_proposal ap')
 			->join('mahasiswa m', 'm.id = ap.mahasiswa_id', 'LEFT')
 			->join('program_studi ps', 'ps.id = m.program_studi_id', 'LEFT')

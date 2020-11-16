@@ -273,6 +273,7 @@ class Expo extends Frontend_Controller
 		{
 			$this->form_validation->set_rules("nim_anggota_{$i}", "NIM Anggota {$i}", 'required');
 			$this->form_validation->set_rules("nama_anggota_{$i}", "Nama Anggota {$i}", 'required');
+			$this->form_validation->set_rules("hp_anggota_{$i}", "HP Anggota {$i}", 'required');
 		}
 	}
 
@@ -375,8 +376,9 @@ class Expo extends Frontend_Controller
 					$anggota = new stdClass();
 					$anggota->proposal_id = $proposal->id;
 					$anggota->no_urut = $i;
-					$anggota->nim = $this->input->post("nim_anggota_$i");
-					$anggota->nama = $this->input->post("nama_anggota_$i");
+					$anggota->nim = trim($this->input->post("nim_anggota_$i"));
+					$anggota->nama = trim($this->input->post("nama_anggota_$i"));
+					$anggota->no_hp = trim($this->input->post("hp_anggota_$i"));
 					$anggota->created_at = $now;
 					$this->db->insert('anggota_proposal', $anggota);
 				}
@@ -408,7 +410,7 @@ class Expo extends Frontend_Controller
 
 			for ($i = 1; $i <= 3; $i++)
 			{
-				if (form_error("nim_anggota_$i") || form_error("nama_anggota_$i"))
+				if (form_error("nim_anggota_$i") || form_error("nama_anggota_$i") || form_error("hp_anggota_$i"))
 				{
 					$this->smarty->assign("error_anggota_$i", true);
 				}
@@ -539,6 +541,7 @@ class Expo extends Frontend_Controller
 							$anggota->no_urut = $i;
 							$anggota->nim = trim($this->input->post('nim_anggota_'.$i));
 							$anggota->nama = trim($this->input->post('nama_anggota_'.$i));
+							$anggota->no_hp = trim($this->input->post('hp_anggota_'.$i));
 							$anggota->created_at = $now;
 							$this->db->insert('anggota_proposal', $anggota);
 
@@ -549,6 +552,7 @@ class Expo extends Frontend_Controller
 							$anggota = $proposal->anggota_proposal_set[$i - 1];
 							$anggota->nim = trim($this->input->post('nim_anggota_'.$i));
 							$anggota->nama = trim($this->input->post('nama_anggota_'.$i));
+							$anggota->no_hp = trim($this->input->post('hp_anggota_'.$i));
 							$anggota->updated_at = $now;
 
 							// Tidak menggunakan relasi mahasiswa, mahasiswa_id dihapus
@@ -594,7 +598,7 @@ class Expo extends Frontend_Controller
 
 			for ($i = 1; $i <= 3; $i++)
 			{
-				if (form_error("nim_anggota_$i") || form_error("nama_anggota_$i"))
+				if (form_error("nim_anggota_$i") || form_error("nama_anggota_$i") || form_error("hp_anggota_$i"))
 				{
 					$this->smarty->assign("error_anggota_$i", true);
 				}
@@ -610,6 +614,7 @@ class Expo extends Frontend_Controller
 				$proposal->anggota_proposal_set[$i - 1] = new stdClass();
 				$proposal->anggota_proposal_set[$i - 1]->nim = NULL;
 				$proposal->anggota_proposal_set[$i - 1]->nama = NULL;
+				$proposal->anggota_proposal_set[$i - 1]->no_hp = NULL;
 			}
 		}
 		
