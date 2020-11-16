@@ -264,16 +264,29 @@ class Expo extends Frontend_Controller
 		$this->form_validation->set_rules('email', 'Email Usaha', 'required|valid_email');
 		$this->form_validation->set_rules('headline', 'Headline', 'required');
 		$this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required');
-		$this->form_validation->set_rules('link_web', 'Web', 'valid_url');
-		$this->form_validation->set_rules('link_instagram', 'Instagram', 'valid_url');
-		$this->form_validation->set_rules('link_twitter', 'Twitter', 'valid_url');
-		$this->form_validation->set_rules('link_youtube', 'Youtube', 'valid_url');
+		$this->form_validation->set_rules('link_web', 'Web', 'callback_required_one|valid_url');
+		$this->form_validation->set_rules('link_instagram', 'Instagram', 'callback_required_one|valid_url');
+		$this->form_validation->set_rules('link_twitter', 'Twitter', 'callback_required_one|valid_url');
+		$this->form_validation->set_rules('link_youtube', 'Youtube', 'required|valid_url');
 		// Anggota min 3
 		for ($i = 1; $i <= 3; $i++)
 		{
 			$this->form_validation->set_rules("nim_anggota_{$i}", "NIM Anggota {$i}", 'required');
 			$this->form_validation->set_rules("nama_anggota_{$i}", "Nama Anggota {$i}", 'required');
 		}
+	}
+
+	public function required_one()
+	{
+		// Jika salah satu saja sudah terisi, maka oke
+		if ($this->input->post('link_web') != '' || $this->input->post('link_instagram') != '' ||
+			$this->input->post('link_twitter') != '')
+		{
+			return TRUE;
+		}
+
+		$this->form_validation->set_message('required_one', 'Isi salah satu dari Web / Instagram / Twitter');
+		return FALSE;
 	}
 	
 	public function add()

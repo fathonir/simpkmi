@@ -71,7 +71,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group {if form_error('link_web') or form_error('link_instagram')}has-error{/if}">
 						<label for="link_web" class="col-lg-2 control-label">Website</label>
 						<div class="col-lg-4">
 							<input name="link_web" type="text" class="form-control" name="link_web" value="{set_value('link_web')}"/>
@@ -84,7 +84,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group {if form_error('link_twitter') or form_error('link_youtube')}has-error{/if}">
 						<label for="link_twitter" class="col-lg-2 control-label">Twitter</label>
 						<div class="col-lg-4">
 							<input name="link_twitter" type="text" class="form-control" name="link_twitter" value="{set_value('link_twitter')}"/>
