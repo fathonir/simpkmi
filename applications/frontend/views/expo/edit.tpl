@@ -33,7 +33,17 @@
 
 					<div class="form-group">
 						<label for="kategori" class="col-lg-2 control-label">Kategori</label>
-						<div class="col-lg-4"><p class="form-control-static">KMI Award Umum</p></div>
+						<div class="col-lg-4"><p class="form-control-static">
+								{if isset($kegiatan_asal)}
+									{if $kegiatan_asal->program_id == PROGRAM_KBMI}
+										KMI Award Kategori KBMI
+									{elseif $kegiatan_asal->program_id == PROGRAM_STARTUP}
+										KMI Award Kategori ASMI
+									{/if}
+								{else}
+									KMI Award Kategori Umum
+								{/if}
+							</p></div>
 					</div>
 					
 					<div class="form-group" style="display: none">

@@ -7,8 +7,6 @@
 	<div class="row">
 		<div class="col-lg-12">
 
-			<div c
-
 			<p><a href="{site_url('expo')}">Kembali ke daftar usulan Expo</a></p>
 			
 			<form action="{current_url()}?kegiatan_id={$smarty.get.kegiatan_id}" method="post" enctype="multipart/form-data" class="form-horizontal">
@@ -19,7 +17,7 @@
 
 					<div class="form-group">
 						<label for="kategori" class="col-lg-2 control-label">Kategori</label>
-						<div class="col-lg-4"><p class="form-control-static">KMI Award Umum</p></div>
+						<div class="col-lg-4"><p class="form-control-static">KMI Award Kategori Umum</p></div>
 					</div>
 					
 					<div class="form-group" style="display: none">

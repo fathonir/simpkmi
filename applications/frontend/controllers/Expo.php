@@ -614,6 +614,7 @@ class Expo extends Frontend_Controller
 		}
 		
 		$this->smarty->assign('proposal', $proposal);
+		$this->smarty->assign('kegiatan_asal', $kegiatan_asal);
 		
 		$kategori_set = $this->db->get_where('kategori', ['program_id' => $this->session->program_id])->result();
 		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
