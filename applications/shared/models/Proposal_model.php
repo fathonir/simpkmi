@@ -27,6 +27,7 @@
  * @property string $link_instagram
  * @property string $link_twitter
  * @property string $link_youtube
+ * @property Kegiatan_model $kegiatan_asal
  */
 class Proposal_model extends CI_Model
 {
