@@ -194,6 +194,26 @@ class Expo extends Frontend_Controller
 				exit();
 			}
 		}
+
+		// Untuk KMI Award UMUM / KMI Award KBMI, maks 1 sub kategori = 1 proposal
+		if ($proposal->is_kmi_award && ($proposal->kegiatan_id_asal == '' || $kegiatan_asal->program_id == PROGRAM_KBMI))
+		{
+			if ($this->proposal_model->has_kmi_award($proposal->kegiatan_id, $proposal->perguruan_tinggi_id,
+				$proposal->kategori_id, $proposal->kegiatan_id_asal))
+			{
+				$this->session->set_flashdata('result', array(
+					'page_title' => 'Daftar Delegasi Expo KMI',
+					'message' => 'Submit gagal. Pastikan 1 sub-kategori untuk 1 proposal saja untuk bisa di daftarkan
+						di KMI Award. Jika ingin didaftarkan ke Expo KMI saja tanpa KMI Award, cukup Edit usulan 
+						dengan tidak memilih KMI Award.',
+					'link_1' => '<a href="'.site_url('expo').'" class="alert-link">Kembali</a>'
+				));
+
+				redirect(site_url('alert/error'));
+
+				exit();
+			}
+		}
 		
 		if ($proposal != NULL)
 		{
