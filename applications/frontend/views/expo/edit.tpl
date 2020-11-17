@@ -46,10 +46,10 @@
 							</p></div>
 					</div>
 					
-					<div class="form-group" style="display: none">
+					<div class="form-group">
 						<label for="is_kmi_award" class="col-lg-2 control-label">Usulkan KMI Award</label>
 						<div class="col-lg-4">
-							<select name="is_kmi_award" class="form-control" {if $has_kmi_award == TRUE and $proposal->is_kmi_award == 0}disabled{/if}>
+							<select name="is_kmi_award" class="form-control">
 								<option value="0" {set_select('is_kmi_award', '0', ($proposal->is_kmi_award == 0))}>Tidak</option>
 								<option value="1" {set_select('is_kmi_award', '1', ($proposal->is_kmi_award == 1))}>Ya</option>
 							</select>
