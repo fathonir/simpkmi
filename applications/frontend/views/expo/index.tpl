@@ -102,6 +102,8 @@
 									KBMI
 								{elseif $data->program_id_asal == PROGRAM_STARTUP}
 									ASMI
+								{else}
+									Umum
 								{/if}
 							</td>
 							<td class="text-center">{$data->nama_kategori}</td>
