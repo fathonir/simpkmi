@@ -314,6 +314,7 @@ class Expo extends Frontend_Controller
 	{
 		$this->load->library('form_validation');
 		$this->load->library('upload');
+		$this->load->helper('assigner');
 
 		$kategori_set = $this->db->get_where('kategori', ['program_id' => $this->session->program_id])->result();
 		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
