@@ -375,9 +375,18 @@ class Expo extends Frontend_Controller
 				$this->db->trans_begin();
 
 				$proposal = new stdClass();
-				assign_to($proposal, $this->input->post(NULL, TRUE));
-				$proposal->kegiatan_id = $kegiatan->id;
 				$proposal->perguruan_tinggi_id = $this->session->perguruan_tinggi->id;
+				$proposal->kegiatan_id = $kegiatan->id;
+				$proposal->is_kmi_award = $this->input->post('is_kmi_award');
+				$proposal->judul = $this->input->post('judul');
+				$proposal->kategori_id = $this->input->post('kategori_id');
+				$proposal->email = $this->input->post('email');
+				$proposal->headline = $this->input->post('headline');
+				$proposal->deskripsi = $this->input->post('deskripsi');
+				$proposal->link_instagram = $this->input->post('link_instagram');
+				$proposal->link_web = $this->input->post('link_web');
+				$proposal->link_twitter = $this->input->post('link_twitter');
+				$proposal->link_youtube = $this->input->post('link_youtube');
 				$proposal->created_at = $now;
 				$this->db->insert('proposal', $proposal);
 
