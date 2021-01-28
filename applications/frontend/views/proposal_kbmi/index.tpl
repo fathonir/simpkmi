@@ -33,7 +33,7 @@
 								<p class="sub-judul">{$data->nama} - {$data->nim} - {$data->nama_program_studi}</p>
 								<p class="sub-judul">Pembimbing: {$data->nama_dosen}</p>
 							</td>
-							<td class="text-center">{$data->jumlah_isian}</td>
+							<td class="text-center">{$data->jumlah_terisi} dari {$data->jumlah_isian}</td>
 							<td class="text-center">
 								{if $data->is_reviewed == TRUE}
 									<label class="label label-primary">Direview</label>

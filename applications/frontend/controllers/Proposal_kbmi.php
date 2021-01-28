@@ -33,11 +33,6 @@ class Proposal_KBMI extends Frontend_Controller
 		$current_pt = $this->session->perguruan_tinggi;
 		$kegiatan_aktif = $this->kegiatan_model->get_aktif(PROGRAM_KBMI);
 		$data_set = $this->proposal_model->list_by_perguruan_tinggi($current_pt->id, $kegiatan_aktif->id);
-		
-		foreach ($data_set as &$data)
-		{
-			$data->jumlah_isian = $data->jumlah_isian . ' dari 31'; // Khusus tahun 2019
-		}
 
 		$this->smarty->assign('waktu_sekarang', date('Y-m-d H:i:s'));
 		$this->smarty->assign('kegiatan', $kegiatan_aktif);

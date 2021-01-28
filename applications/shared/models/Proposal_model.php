@@ -151,7 +151,9 @@ class Proposal_model extends CI_Model
 			->where('fp.proposal_id = p.id')->get_compiled_select();
 		
 		return $this->db
-			->select('p.id, p.judul, ap.mahasiswa_id, m.nim, m.nama, ps.nama as nama_program_studi, d.nama as nama_dosen, p.is_submited, p.is_reviewed, count(ip.id) as jumlah_isian')
+			->select('p.id, p.judul, ap.mahasiswa_id, m.nim, m.nama, ps.nama as nama_program_studi')
+			->select('d.nama as nama_dosen, p.is_submited, p.is_reviewed, count(ip.id) as jumlah_terisi')
+			->select('count(i.id) as jumlah_isian')
 			->select("({$select_file_pitchdeck}) as file_pitchdeck", FALSE)
 			->select("({$select_link_presentasi}) as link_presentasi", FALSE)
 			->select("({$select_link_produk}) as link_produk", FALSE)
@@ -161,7 +163,9 @@ class Proposal_model extends CI_Model
 			->join('program_studi ps', 'ps.id = m.program_studi_id')
 			->join('dosen d', 'd.id = p.dosen_id', 'LEFT')
 			->join('isian_proposal ip', 'ip.proposal_id = p.id AND ip.isian_ke > 0', 'LEFT')
-			->where(['p.perguruan_tinggi_id' => $perguruan_tinggi_id, 'kegiatan_id' => $kegiatan_id])
+			->join('kegiatan k', 'k.id = p.kegiatan_id')
+			->join('isian i', 'i.kegiatan_id = k.id')
+			->where(['p.perguruan_tinggi_id' => $perguruan_tinggi_id, 'p.kegiatan_id' => $kegiatan_id])
 			->group_by('p.id, p.judul, ap.mahasiswa_id, m.nim, m.nama, ps.nama, d.nama, p.is_submited')
 			->get()->result();
 	}
