@@ -172,7 +172,11 @@ class Proposal_model extends CI_Model
 	
 	public function list_by_mahasiswa($mahasiswa_id, $program_id)
 	{
-		$select_isian_proposal_count = $this->db
+		$select_isian_count = $this->db
+			->select('count(i.id)')->from('isian i')->where('i.kegiatan_id = k.id')
+			->get_compiled_select();
+
+		$select_terisi_count = $this->db
 			->select('count(ip.id)')->from('isian_proposal ip')
 			->where('ip.isian is not null', NULL, FALSE)
 			->where('ip.proposal_id = p.id')
@@ -200,7 +204,8 @@ class Proposal_model extends CI_Model
 		
 		return $this->db
 			->select('p.id, k.tahun, p.judul, p.is_submited, p.is_didanai')
-			->select("({$select_isian_proposal_count}) as isian_proposal", FALSE)
+			->select("({$select_terisi_count}) as jumlah_terisi", FALSE)
+			->select("({$select_isian_count}) as jumlah_isian", FALSE)
 			->select("({$select_file_pitchdeck}) as file_pitchdeck", FALSE)
 			->select("({$select_link_presentasi}) as link_presentasi", FALSE)
 			->select("({$select_link_produk}) as link_produk", FALSE)

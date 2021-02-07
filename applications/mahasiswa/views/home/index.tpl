@@ -99,7 +99,10 @@
 								<tr>
 									<td>{$proposal_kbmi->tahun}</td>
 									<td>{$proposal_kbmi->judul|htmlentities}</td>
-									<td><span class="badge">{$proposal_kbmi->isian_proposal}</span> dari <span class="badge">31</span></td>
+									<td>
+										<span class="badge">{$proposal_kbmi->jumlah_terisi}</span> dari
+										<span class="badge">{$proposal_kbmi->jumlah_isian}</span>
+									</td>
 									<td><span class="label label-info"></span></td>
 									<td>
 										{if $proposal_kbmi->is_submited}
