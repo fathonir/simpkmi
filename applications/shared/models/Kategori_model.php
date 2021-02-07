@@ -15,4 +15,9 @@ class Kategori_model extends CI_Model
 	{
 		return $this->db->get_where('kategori', ['id' => $id])->row();
 	}
+
+	function list_kategori_by_program($program_id)
+	{
+		return $this->db->get_where('kategori', ['program_id' => $program_id])->result();
+	}
 }
