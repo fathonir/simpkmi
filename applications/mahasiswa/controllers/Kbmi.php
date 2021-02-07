@@ -10,6 +10,7 @@
  * @property Anggota_proposal_model $anggota_model
  * @property Syarat_model $syarat_model
  * @property Isian_model $isian_model
+ * @property Kategori_model $kategori_model
  */
 class Kbmi extends Mahasiswa_Controller
 {
@@ -30,6 +31,7 @@ class Kbmi extends Mahasiswa_Controller
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_model');
 		$this->load->model(MODEL_SYARAT, 'syarat_model');
 		$this->load->model(MODEL_ISIAN, 'isian_model');
+		$this->load->model(MODEL_KATEGORI, 'kategori_model');
 	}
 	
 	public function identitas()
@@ -52,6 +54,7 @@ class Kbmi extends Mahasiswa_Controller
 			{
 				$proposal->judul = trim($this->input->post('judul'));
 				$proposal->mulai_berjalan = trim($this->input->post('mulai_berjalan'));
+				$proposal->kategori_id = $this->input->post('kategori_id');
 				$proposal->updated_at = date('Y-m-d H:i:s');
 				$this->proposal_model->update($proposal->id, $proposal);
 			}
@@ -69,6 +72,9 @@ class Kbmi extends Mahasiswa_Controller
 		
 		$program_studi_set = $this->program_studi_model->list_by_pt_sarjana_only($this->session->perguruan_tinggi->npsn);
 		$this->smarty->assignForCombo('program_studi_set', $program_studi_set, 'id', 'nama');
+
+		$kategori_set = $this->kategori_model->list_kategori_by_program(PROGRAM_KBMI);
+		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
 		
 		$this->smarty->display();
 	}

@@ -14,7 +14,7 @@
 					<legend>Informasi Umum</legend>
 					
 					<div class="form-group">
-						<label class="col-lg-2 control-label">Nama / Merek Perusahaan</label>
+						<label class="col-lg-2 control-label">Judul Usaha</label>
 						<div class="col-lg-8 col-md-10">
 							{if $proposal->is_submited == FALSE}
 								<input type="text" name="judul" class="form-control" value="{$proposal->judul}" />
@@ -25,15 +25,25 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-lg-2 control-label">Bisnis Berjalan Sejak</label>
+						<label class="col-lg-2 control-label">Berjalan Sejak</label>
 						<div class="col-lg-4 col-md-6">
 							{if $proposal->is_submited == FALSE}
 								<input type="text" name="mulai_berjalan" class="form-control" value="{$proposal->mulai_berjalan}" />
-								<span class="help-block">Tulis informasi kapan bisnis mulai dijalankan.
+								<span class="help-block">Tulis informasi kapan usaha mulai dijalankan.
 								Misal: Januari 2020</span>
 							{else}
 								<p class="form-control-static">{$proposal->mulai_berjalan}</p>
 							{/if}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-2 control-label">Kategori</label>
+						<div class="col-lg-4 col-lg-6">
+							<select name="kategori_id" class="form-control">
+								<option value=""></option>
+								{html_options options=$kategori_set selected=$proposal->kategori_id}
+							</select>
 						</div>
 					</div>
 					
@@ -92,7 +102,7 @@
 					
 					<div class="form-group">
 						<input type="hidden" name="dosen_id" value="{$proposal->dosen_id}" />
-						<label class="col-lg-2 control-label">Dosen Pendamping</label>
+						<label class="col-lg-2 control-label">Dosen Pembimbing</label>
 						
 						<div class="col-lg-8 col-md-10" id="dosen-view">
 							{if $proposal->dosen_id != ''}
