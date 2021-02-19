@@ -34,22 +34,22 @@
 					
 					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="waktu_mulai">Waktu Meeting</label>  
+						<label class="col-md-2 control-label" for="waktu_mulai_time">Waktu Meeting</label>
 						<div class="col-md-5">
 							{html_select_date field_order="DMY" prefix="waktu_mulai_" all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
-                            <input type="text" name="waktu_mulai_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
+							<input type="text" id="waktu_mulai_time" name="waktu_mulai_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
 						</div>
 					</div>
-                        
-                    <!-- Text input-->
+
+					<!-- Text input-->
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="meeting_url">Meeting URL</label>  
 						<div class="col-md-4">
 							<input id="meeting_url" name="meeting_url" placeholder="" class="form-control input-md" type="text" value="">
 						</div>
 					</div>
-                    
-                    <!-- Text input-->
+
+					<!-- Text input-->
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="meeting_password">Password</label>  
 						<div class="col-md-3">
@@ -59,43 +59,35 @@
 						
 					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="tgl_awal_registrasi">Awal Registrasi</label>
+						<label class="col-md-2 control-label" for="awal_registrasi_time">Awal Registrasi</label>
 						<div class="col-md-5">
 							{html_select_date field_order="DMY" prefix="awal_registrasi_" all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
-							<input type="text" name="awal_registrasi_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
+							<input type="text" id="awal_registrasi_time" name="awal_registrasi_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
 						</div>
 					</div>
 
 					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="tgl_akhir_registrasi">Akhir Registrasi</label>
+						<label class="col-md-2 control-label" for="akhir_registrasi_time">Akhir Registrasi</label>
 						<div class="col-md-5">
 							{html_select_date field_order="DMY" prefix="akhir_registrasi_" all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
-							<input type="text" name="akhir_registrasi_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
+							<input type="text" id="akhir_registrasi_time" name="akhir_registrasi_time" value="" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
 						</div>
 					</div>
-                            
-                    <!-- Text input-->
+
+					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="kode_kehadiran_1">Kode Kehadiran 1</label>  
+						<label class="col-md-2 control-label" for="kode_kehadiran">Kode Kehadiran</label>
 						<div class="col-md-2">
-                            <input id="kode_kehadiran_1" name="kode_kehadiran_1" placeholder="" class="form-control input-md" type="text" value="" maxlength="5">
+							<input id="kode_kehadiran" name="kode_kehadiran" placeholder="" class="form-control input-md" type="text" value="" maxlength="5">
 						</div>
 					</div>
-                    
-                    <!-- Text input-->
-					<div class="form-group">
-						<label class="col-md-2 control-label" for="kode_kehadiran_2">Kode Kehadiran 2</label>  
-						<div class="col-md-2">
-                            <input id="kode_kehadiran_2" name="kode_kehadiran_2" placeholder="" class="form-control input-md" type="text" value="" maxlength="5">
-						</div>
-					</div>
-                    
-                    <!-- Text input-->
+
+					<!-- Text input-->
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="kapasitas">Kapasitas</label>  
 						<div class="col-md-2">
-                            <input id="kapasitas" name="kapasitas" placeholder="" class="form-control input-md" type="number" value="0">
+							<input id="kapasitas" name="kapasitas" placeholder="" class="form-control input-md" type="number" value="0">
 						</div>
 					</div>
 							

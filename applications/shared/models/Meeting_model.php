@@ -71,8 +71,7 @@ class Meeting_model extends CI_Model
 		$meeting->meeting_password = $post['meeting_password'];
 		$meeting->tgl_awal_registrasi = "{$post['awal_registrasi_Year']}-{$post['awal_registrasi_Month']}-{$post['awal_registrasi_Day']} {$post['awal_registrasi_time']}";
 		$meeting->tgl_akhir_registrasi = "{$post['akhir_registrasi_Year']}-{$post['akhir_registrasi_Month']}-{$post['akhir_registrasi_Day']} {$post['akhir_registrasi_time']}";
-		$meeting->kode_kehadiran_1 = $post['kode_kehadiran_1'];
-		$meeting->kode_kehadiran_2 = $post['kode_kehadiran_2'];
+		$meeting->kode_kehadiran = $post['kode_kehadiran'];
 		$meeting->kapasitas = $post['kapasitas'];
 		
 		return $this->db->insert('meeting', $meeting);
