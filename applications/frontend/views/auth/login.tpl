@@ -36,7 +36,7 @@
             </form>
         </div>
 
-        <div class="col-sm-6 col-lg-5">
+        <div class="col-sm-6 col-lg-7">
             <h3>Hal yang perlu diperhatikan</h3>
             <ol>
                 <li>Username & password yang Resmi hanya yang berasal dari sistem SIM-PKMI.</li>
