@@ -47,7 +47,7 @@
 				<li class="text-danger">Bagi mahasiswa yang belum mendapatkan email, silahkan masuk
 					ke halaman <a href="{site_url('auth/registrasi-mahasiswa')}">Registrasi Mahasiswa</a>
 					untuk Reset Password dengan memasukkan data yang pernah diinputkan sebelumnya.</li>
-				<li>Untuk pertanyaan lebih lanjut, bisa menghubungi WA : 0878-7363-0275 (Arya)</li>
+				<li>Untuk pertanyaan lebih lanjut, bisa menghubungi WA : 0812-2123-033 (Agnes) & 0878-7363-0275 (Arya)</li>
             </ol>
         </div>
     </div>
