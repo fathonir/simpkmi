@@ -38,6 +38,8 @@
                             <th>NIM</th>
 							<th>Nama</th>
 							<th style="width: 25px">Status Kehadiran</th>
+							<th>Username</th>
+							<th>Password</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -47,12 +49,14 @@
                                 <td>{$data->nim}</td>
 								<td>{$data->nama}</td>
 								<td class="text-center">{if $data->kehadiran == true}<span class="label label-primary">Ya</span>{/if}</td>
+								<td>{$data->username}</td>
+								<td>{$data->password}</td>
 							</tr>
 						{/foreach}
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="4">
+							<td colspan="6">
 								<a href="{site_url('online-workshop/excel-pendaftar')}?kegiatan_id={$smarty.get.kegiatan_id}&meeting_id={$smarty.get.meeting_id}">Download Excel</a>
 							</td>
 						</tr>
