@@ -104,6 +104,7 @@ class Online_workshop extends Mahasiswa_Controller
 	{
 		$meeting_id = $this->input->get('meeting_id');
 		$meeting = $this->meeting_model->get_single($meeting_id);
+		$kegiatan = $this->kegiatan_model->get_single($meeting->kegiatan_id);
 		
 		$background_path = FCPATH . 'upload' . 
 			DIRECTORY_SEPARATOR . 'sertifikat' . 
@@ -111,10 +112,22 @@ class Online_workshop extends Mahasiswa_Controller
 		
 		$this->mpdf->AddPage('L');
 		$this->mpdf->Image($background_path, 0, 0, 297, 210, '', '', true, false);
-		$this->mpdf->SetFont('FreeSerif');
-		$this->mpdf->SetFontSize(22);
-		$this->mpdf->SetY(90);
-		$this->mpdf->WriteCell(267, 15, ucwords(strtolower($this->session->user->mahasiswa->nama)), 0, 0, 'C');
+
+		if ($kegiatan->tahun == 2020)
+		{
+			$this->mpdf->SetFont('FreeSerif');
+			$this->mpdf->SetFontSize(22);
+			$this->mpdf->SetY(90);
+			$this->mpdf->WriteCell(267, 15, ucwords(strtolower($this->session->user->mahasiswa->nama)), 0, 0, 'C');
+		}
+		elseif ($kegiatan->tahun == 2021)
+		{
+			$this->mpdf->SetFont('FreeSerif');
+			$this->mpdf->SetFontSize(22);
+			$this->mpdf->SetY(75);
+			$this->mpdf->WriteCell(267, 15, ucwords(strtolower($this->session->user->mahasiswa->nama)), 0, 0, 'C');
+		}
+
 		$this->mpdf->Output('Sertifikat ', 'I');
 	}
 }

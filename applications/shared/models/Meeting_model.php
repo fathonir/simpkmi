@@ -55,6 +55,7 @@ class Meeting_model extends CI_Model
 			->from('meeting')
 			->join('peserta_meeting pm', 'pm.meeting_id = meeting.id')
 			->where('pm.mahasiswa_id', $mahasiswa_id)
+			->order_by('meeting.waktu_mulai asc')
 			->get()->result();
 	}
 
