@@ -43,7 +43,7 @@
 
 					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="tgl_awal_upload">Tanggal Awal Upload</label>
+						<label class="col-md-2 control-label" for="tgl_awal_upload">Tanggal Awal Registrasi</label>
 						<div class="col-md-5">
 							{html_select_date field_order="DMY" prefix="awal_upload_" time=$data->tgl_awal_upload year_as_text=TRUE all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
 							<input type="text" name="awal_upload_HMS" value="{$data->tgl_awal_upload|date_format:"%H:%M:%S"}" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
@@ -52,7 +52,7 @@
 
 					<!-- Text input-->
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="tgl_akhir_upload">Tanggal Akhir Upload</label>
+						<label class="col-md-2 control-label" for="tgl_akhir_upload">Tanggal Akhir Registrasi</label>
 						<div class="col-md-5">
 							{html_select_date field_order="DMY" prefix="akhir_upload_" time=$data->tgl_akhir_upload year_as_text=TRUE all_extra='class="form-control input-md" style="display: inline-block; width: auto;"'}
 							<input type="text" name="akhir_upload_HMS" value="{$data->tgl_akhir_upload|date_format:"%H:%M:%S"}" placeholder="00:00:00" class="form-control input-md" style="display: inline-block; width: 85px" />
