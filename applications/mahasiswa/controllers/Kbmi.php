@@ -73,6 +73,9 @@ class Kbmi extends Mahasiswa_Controller
 		$program_studi_set = $this->program_studi_model->list_by_pt_sarjana_only($this->session->perguruan_tinggi->npsn);
 		$this->smarty->assignForCombo('program_studi_set', $program_studi_set, 'id', 'nama');
 
+		$program_studi2_set = $this->program_studi_model->list_by_pt($this->session->perguruan_tinggi->npsn);
+		$this->smarty->assignForCombo('program_studi2_set', $program_studi2_set, 'id', 'nama');
+
 		$kategori_set = $this->kategori_model->list_kategori_by_program(PROGRAM_KBMI);
 		$this->smarty->assignForCombo('kategori_set', $kategori_set, 'id', 'nama_kategori');
 		

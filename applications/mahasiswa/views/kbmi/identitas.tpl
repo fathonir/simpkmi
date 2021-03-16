@@ -116,7 +116,7 @@
 						</div>
 						<div class="col-lg-8 col-md-10" id="dosen-cari" style="display: none">
 							<select name="program_studi_id_dosen" class="form-control" style="width: 50%; display: inline">
-								{html_options options=$program_studi_set}
+								{html_options options=$program_studi2_set}
 							</select>
 							<input type="text" name="nidn" class="form-control" style="width: 25%; display:inline" placeholder="NIDN" />
 							<button class="btn btn-info btn-dosen-cari"><i class="glyphicon glyphicon-search"></i> Cari</button>
