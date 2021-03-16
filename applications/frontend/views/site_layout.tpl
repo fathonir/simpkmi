@@ -49,6 +49,7 @@
 							</li>
 							*}
 							<li><a href="{site_url('proposal-kbmi')}">Proposal KBMI</a></li>
+							<li><a href="{site_url('pwmi')}">PWMI</a></li>
 							{/if}
 							{if $ci->session->program_id == PROGRAM_STARTUP}
 							<li><a href="{site_url('proposal-startup')}">Usulan Startup</a></li>

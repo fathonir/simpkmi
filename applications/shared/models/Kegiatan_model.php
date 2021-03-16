@@ -9,6 +9,7 @@
  * @property int $program_id
  * @property int $tahun
  * @property int $proposal_per_pt
+ * @property int $peserta_per_pt
  * @property int $is_aktif
  * @property string $tgl_awal_upload
  * @property string $tgl_akhir_upload

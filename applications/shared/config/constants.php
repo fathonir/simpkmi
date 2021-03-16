@@ -35,6 +35,7 @@ define('MODEL_MAHASISWA', 'Mahasiswa_model');
 define('MODEL_DOSEN', 'Dosen_model');
 define('MODEL_DOSEN_PENDAMPING', 'Dosen_Pendamping_model');
 define('MODEL_ISIAN', 'Isian_model');
+define('MODEL_USULAN_PENDAMPING', 'Usulan_pendamping_model');
 
 // Jenis Program
 define('PROGRAM_PBBT', 1);
@@ -44,6 +45,7 @@ define('PROGRAM_WORKSHOP', 4);
 define('PROGRAM_STARTUP', 5);
 define('PROGRAM_STARTUP_MEETUP', 6);
 define('PROGRAM_ONLINE_WORKSHOP', 7);
+define('PROGRAM_PWMI', 8);
 
 // Jenis User
 define('TIPE_USER_NORMAL', 1);

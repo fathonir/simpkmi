@@ -31,11 +31,11 @@ class Dosen_model extends CI_Model
 	public function get_by_nidn($npsn, $program_studi_id, $nidn)
 	{
 		$dosen = $this->db
-			->select('d.*')
+			->select('d.*, ps.nama as nama_program_studi')
 			->from('dosen d')
 			->join('perguruan_tinggi pt', 'pt.id = d.perguruan_tinggi_id')
+			->join('program_studi ps', 'ps.id = d.program_studi_id')
 			->where('pt.npsn', $npsn)
-			->where('d.program_studi_id', $program_studi_id)
 			->where('d.nidn', $nidn)
 			->get()->row();
 		

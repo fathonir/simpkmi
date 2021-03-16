@@ -95,6 +95,14 @@
 								</ul>
 							</li>
 							<li>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PWMI <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="{site_url('pwmi/usulan')}">Usulan Pendamping</a></li>
+									<li><a href="{site_url('pwmi')}">Daftar Pendamping</a></li>
+									<li><a href="{site_url('pwmi/penetapan')}">Penetapan Pendamping</a></li>
+								</ul>
+							</li>
+							<li>
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Buku Profil <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="{site_url('buku-profil')}">Daftar Isian</a></li>

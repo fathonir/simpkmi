@@ -48,6 +48,18 @@ class Syarat_model extends CI_Model
 		}
 		
 	}
+
+	public function list_by_kegiatan_pwmi($kegiatan_id, $usulan_pendamping_id)
+	{
+		return $this->db
+			->select('s.id, s.syarat, s.keterangan, s.is_wajib, s.allowed_types, s.max_size, s.is_aktif, s.is_upload')
+			->select('fup.id as file_usulan_pendamping_id, fup.nama_file, fup.nama_asli')
+			->from('syarat s')
+			->join('file_usulan_pendamping fup', 'fup.syarat_id = s.id AND fup.usulan_pendamping_id = '.$usulan_pendamping_id, 'LEFT')
+			->where(['s.kegiatan_id' => $kegiatan_id])
+			->order_by('urutan')
+			->get()->result();
+	}
 	
 	public function is_deletable($id)
 	{
