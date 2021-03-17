@@ -75,7 +75,8 @@
 							</div>
 
 							<div class="form-group">
-								<div class="col-lg-offset-2 col-lg-2">
+								<div class="col-lg-offset-2 col-lg-4">
+									<a href="{site_url('proposal-kbmi')}" class="btn btn-default">Kembali</a>
 									<button class="btn btn-success">Tambahkan</button>
 								</div>
 							</div>

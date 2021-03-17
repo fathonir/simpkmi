@@ -35,6 +35,15 @@ class Mahasiswa_model extends CI_Model
 	{
 		return $this->db->update('mahasiswa', $model, ['id' => $model->id]);
 	}
+
+	/**
+	 * @param $id_pdpt
+	 * @return Mahasiswa_model
+	 */
+	function get_by_id_pdpt($id_pdpt)
+	{
+		return $this->db->get_where('mahasiswa', ['id_pdpt' => $id_pdpt])->first_row();
+	}
 	
 	/**
 	 * @param string $npsn Kode Perguruan Tinggi
@@ -81,15 +90,22 @@ class Mahasiswa_model extends CI_Model
 			$program_studi = $this->program_studi_model->get($program_studi_id);
 			$program_studi->kode_prodi = trim($program_studi->kode_prodi);
 
-			// Cari dari Forlap
+			// Find by ID dulu
 			$response = $this->client->get("pt/{$pt->npsn}/prodi/{$program_studi->id_pdpt}/mahasiswa/{$nim}");
 
 			if ($response->getStatusCode() == 200)
 			{
-				$body = $response->getBody();
-				$mahasiswa_pddikti = json_decode($body);
-				
-				if ( ! isset($mahasiswa_pddikti[0]))
+				$mahasiswa_pddikti = json_decode($response->getBody());
+
+				// Jika belum ketemu -> find by kode
+				if (count(json_decode($response->getBody())) == 0)
+				{
+					$response = $this->client->get("pt/{$pt->npsn}/prodi/{$program_studi->kode_prodi}/mahasiswa/{$nim}");
+					$mahasiswa_pddikti = json_decode($response->getBody());
+				}
+
+				// Jika (masih) belum ketemu
+				if (count($mahasiswa_pddikti) == 0)
 				{
 					throw new Exception("Mahasiswa tidak ditemukan di sistem maupun di PDDIKTI");
 				}
@@ -102,8 +118,22 @@ class Mahasiswa_model extends CI_Model
 				}
 				else
 				{
-					// Insert Mahasiswa dari Pddikti
-					$this->insert_from_pddikti($mahasiswa_pddikti[0]);
+					// Get mahasiswa existing
+					$mahasiswa_existing = $this->get_by_id_pdpt(strtolower($mahasiswa_pddikti[0]->id));
+
+					// Jika belum ada
+					if ($mahasiswa_existing == null)
+					{
+						// Insert Mahasiswa dari Pddikti
+						$this->insert_from_pddikti($mahasiswa_pddikti[0]);
+					}
+					else
+					{
+						// Update PT dan Prodi
+						$mahasiswa_existing->perguruan_tinggi_id = $pt->id;
+						$mahasiswa_existing->program_studi_id = $program_studi_id;
+						$this->update($mahasiswa_existing);
+					}
 
 					// di query ulang
 					$mahasiswa = $this->get_by_nim($npsn, $program_studi_id, $nim);
