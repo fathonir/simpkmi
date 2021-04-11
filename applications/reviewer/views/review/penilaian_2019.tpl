@@ -144,7 +144,7 @@
 						<span class="input-group-addon">Rp.</span>
 						<input type="text" class="form-control number" name="biaya_rekomendasi" value="{$plot_reviewer->biaya_rekomendasi}"/>
 					</div>
-					<span class="help-block">Min Rp 10.000.000 , Maks Rp 20.000.000 </span>
+					<span class="help-block">Min Rp 10.000.000 , Maks Rp 25.000.000 </span>
 					{if form_error('biaya_rekomendasi')}
 						{form_error('biaya_rekomendasi')}
 					{/if}
