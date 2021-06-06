@@ -6,10 +6,11 @@
  * @property CI_Email $email
  * @property CI_DB_query_builder|CI_DB_mysqli_driver $db
  * @property Smarty_wrapper $smarty
+ * @property CI_Input $input
  */
 class Tools extends CI_Controller
 {
-	public function kirim_login_pendamping($tahun_kegiatan)
+	public function kirim_login_pendamping($tahun_kegiatan = 0, $limit = 100)
 	{
 		$this->load->library('email');
 		$this->config->load('email');
@@ -20,6 +21,7 @@ class Tools extends CI_Controller
 			->join('dosen d', 'd.id = dp.dosen_id')
 			->join('user u', 'u.dosen_id = d.id AND u.is_sent = 0')
 			->where('k.tahun', $tahun_kegiatan)
+			->limit($limit)
 			->get()->result();
 
 		foreach ($user_set as $user)
@@ -39,14 +41,16 @@ class Tools extends CI_Controller
 			$this->email->message($body);
 			$send_result = $this->email->send(FALSE);
 
+			$eol = is_cli() ? "\n" : "<br/>";
+
 			if ($send_result)
 			{
 				$this->db->update('user', ['is_sent' => 1], ['id' => $user->id]);
-				echo "Berhasil!\n";
+				echo "Berhasil!" . $eol;
 			}
 			else
 			{
-				echo "Gagal!\n";
+				echo "Gagal!" . $eol;
 			}
 		}
 	}
