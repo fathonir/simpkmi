@@ -68,7 +68,8 @@ class Proposal_model extends CI_Model
 		// Basic Query
 		$this->db
 			->select('p.id, p.judul, m.nama, pt.nama_pt')
-			->select('case p.is_submited when 1 then p.updated_at when 0 then null end as updated_at', false)
+			->select('p.is_submited, p.is_didanai')
+			->select('p.dana_disetujui')
 			->from('proposal p')
 			->join('anggota_proposal ap', 'ap.proposal_id = p.id AND ap.no_urut = 1')
 			->join('mahasiswa m', 'm.id = ap.mahasiswa_id')
@@ -78,6 +79,11 @@ class Proposal_model extends CI_Model
 		if ($tampilan == 'submited')
 		{
 			$this->db->where('p.is_submited', 1);
+		}
+
+		if ($tampilan == 'didanai')
+		{
+			$this->db->where('p.is_didanai', 1);
 		}
 		
 		// Total records
@@ -95,7 +101,9 @@ class Proposal_model extends CI_Model
 			if ($dt_params['order'][0]['column'] == 0) $this->db->order_by('p.judul', $dt_params['order'][0]['dir']);
 			if ($dt_params['order'][0]['column'] == 1) $this->db->order_by('m.nama', $dt_params['order'][0]['dir']);
 			if ($dt_params['order'][0]['column'] == 2) $this->db->order_by('pt.nama_pt', $dt_params['order'][0]['dir']);
-			if ($dt_params['order'][0]['column'] == 3) $this->db->order_by('p.updated_at', $dt_params['order'][0]['dir']);
+			if ($dt_params['order'][0]['column'] == 3) $this->db->order_by('p.is_submited', $dt_params['order'][0]['dir']);
+			if ($dt_params['order'][0]['column'] == 4) $this->db->order_by('p.is_didanai', $dt_params['order'][0]['dir']);
+			if ($dt_params['order'][0]['column'] == 5) $this->db->order_by('p.dana_disetujui', $dt_params['order'][0]['dir']);
 		}
 		
 		// Search

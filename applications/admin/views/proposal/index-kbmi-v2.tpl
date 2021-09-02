@@ -22,8 +22,9 @@
 				</div>
 				<div class="form-group">
 					<select name="tampilan" class="form-control input-sm">
-						<option value="submited" {if $tampilan == 'submited'}selected{/if}>Sudah Submit</option>
 						<option value="all" {if $tampilan == 'all'}selected{/if}>Semua Usulan</option>
+						<option value="submited" {if $tampilan == 'submited'}selected{/if}>Sudah Submit</option>
+						<option value="didanai" {if $tampilan == 'didanai'}selected{/if}>Didanai</option>
 					</select>
 				</div>
 				<button type="submit" class="btn btn-sm btn-default">
@@ -38,6 +39,9 @@
 						<th>Pengusul</th>
 						<th>Perguruan Tinggi</th>
 						<th>Submit</th>
+						<th>Didanai</th>
+						<th>Pendanaan</th>
+						<th>Aksi</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -61,7 +65,22 @@
 				{ data: 'judul' },
 				{ data: 'nama' },
 				{ data: 'nama_pt' },
-				{ data: 'updated_at' }
+				{
+					data: 'is_submited',
+					className: 'text-center',
+					render: (data, type, row) => { return (data === '1') ? '<span class="label label-primary"><i class="glyphicon glyphicon-ok"></i></span>' : '' }
+				},
+				{
+					data: 'is_didanai',
+					className: 'text-center',
+					render: (data, type, row) => { return (data === '1') ? '<span class="label label-success"><i class="glyphicon glyphicon-ok"></i></span>' : null }
+				},
+				{
+					data: 'dana_disetujui',
+					className: 'text-right',
+					render: $.fn.dataTable.render.number('.', ',', 0, '')
+				},
+				{ render: () => ''}
 			],
 			language: {
 				searchPlaceholder: 'Judul, Ketua, PT ...'
