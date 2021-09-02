@@ -44,7 +44,11 @@ class Syarat_model extends CI_Model
 		}
 		else
 		{
-			return $this->db->from('syarat')->where(['kegiatan_id' => $kegiatan_id])->order_by('urutan')->get()->result();
+			return $this->db
+				->select('s.*, t.tahapan')
+				->from('syarat s')
+				->join('tahapan t', 't.id = s.tahapan_id')
+				->where(['s.kegiatan_id' => $kegiatan_id])->order_by('urutan')->get()->result();
 		}
 		
 	}
@@ -71,6 +75,7 @@ class Syarat_model extends CI_Model
 		$post = $this->input->post();
 		
 		$syarat					= new stdClass();
+		$syarat->tahapan_id		= $post['tahapan_id'];
 		$syarat->kegiatan_id	= $post['kegiatan_id'];
 		$syarat->urutan			= $post['urutan'];
 		$syarat->syarat			= $post['syarat'];
@@ -103,6 +108,7 @@ class Syarat_model extends CI_Model
 		$post = $this->input->post();
 		
 		$syarat					= $this->get_single($id);
+		$syarat->tahapan_id		= $post['tahapan_id'];
 		$syarat->urutan			= $post['urutan'];
 		$syarat->syarat			= $post['syarat'];
 		$syarat->keterangan		= $post['keterangan'];

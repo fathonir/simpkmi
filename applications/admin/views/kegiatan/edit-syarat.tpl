@@ -15,6 +15,16 @@
 							<p class="form-control-static">{$kegiatan->nama_program} {$kegiatan->tahun}</p>
 						</div>
 					</div>
+
+					<!-- Select Box -->
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="tahapan_id">Tahapan</label>
+						<div class="col-md-3">
+							<select name="tahapan_id" class="form-control input-md">
+								{html_options options=$tahapan_set selected=$data->tahapan_id}
+							</select>
+						</div>
+					</div>
 						
 					<!-- Text input-->
 					<div class="form-group">
@@ -36,7 +46,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="keterangan">Keterangan</label>  
 						<div class="col-md-6">
-							<input id="keterangan" name="keterangan" placeholder="" class="form-control input-md" type="text" value="{$data->keterangan}">
+							<input id="keterangan" name="keterangan" placeholder="" class="form-control input-md" type="text" value="{htmlentities($data->keterangan)}">
 						</div>
 					</div>
 					
