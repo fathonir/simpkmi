@@ -501,9 +501,7 @@ class Kbmi extends Mahasiswa_Controller
 		}
 
 		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
-		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id, $proposal->id, [
-			'Kemajuan', 'Bukti Pembelanjaan', 'Bukti Kegiatan'
-		]);
+		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id, TAHAPAN_MONEV, $proposal->id);
 
 		if ($this->input->post('tombol') == 'Simpan')
 		{
@@ -517,7 +515,7 @@ class Kbmi extends Mahasiswa_Controller
 			exit();
 		}
 
-		if ($this->input->post('tombol') == 'Unggah')
+		if ($this->input->post('tombol') == 'Upload')
 		{
 			$this->load->library('upload');
 
@@ -534,27 +532,27 @@ class Kbmi extends Mahasiswa_Controller
 				{
 					$data = $this->upload->data();
 
-					$file_row_exist = $this->db->where(array(
+					$file_row_exist = $this->db->where([
 							'proposal_id' => $proposal->id,
 							'syarat_id' => $syarat->id
-						))->count_all_results('file_proposal') > 0;
+						])->count_all_results('file_proposal') > 0;
 
 					// if file record exist : update
 					if ($file_row_exist)
 					{
-						$this->db->update('file_proposal', array(
+						$this->db->update('file_proposal', [
 							'nama_asli' => $data['orig_name'],
 							'nama_file' => $data['file_name']
-						), array('proposal_id' => $proposal->id, 'syarat_id' => $syarat->id));
+						], ['proposal_id' => $proposal->id, 'syarat_id' => $syarat->id]);
 					}
 					else // insert
 					{
-						$this->db->insert('file_proposal', array(
+						$this->db->insert('file_proposal', [
 							'proposal_id' => $proposal->id,
 							'nama_asli' => $data['orig_name'],
 							'nama_file' => $data['file_name'],
 							'syarat_id' => $syarat->id
-						));
+						]);
 					}
 				}
 				else

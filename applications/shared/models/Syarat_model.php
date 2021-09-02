@@ -21,25 +21,16 @@ class Syarat_model extends CI_Model
 	 * @param array $filter_exclude Filter nama syarat apa saja yang tidak boleh muncul
 	 * @return Syarat_model[]
 	 */
-	public function list_by_kegiatan($kegiatan_id, $proposal_id = 0, $filter_include = null, $filter_exclude = null)
+	public function list_by_kegiatan($kegiatan_id, $tahapan_id = null, $proposal_id = 0)
 	{
 		if ($proposal_id != 0)
 		{
-			if (is_array($filter_include))
-			{
-				$this->db->where_in('s.syarat', $filter_include);
-			}
-
-			if (is_array($filter_exclude))
-			{
-				$this->db->where_not_in('s.syarat', $filter_exclude);
-			}
-
 			return $this->db
 				->select('s.id, s.syarat, s.keterangan, s.is_wajib, s.allowed_types, s.max_size, s.is_aktif, s.is_upload')
 				->select('fp.id as file_proposal_id, fp.nama_file, fp.nama_asli')
-				->from('syarat s')->join('file_proposal fp', 'fp.syarat_id = s.id AND fp.proposal_id = '.$proposal_id, 'LEFT')
-				->where(['s.kegiatan_id' => $kegiatan_id])->order_by('urutan')
+				->from('syarat s')
+				->join('file_proposal fp', 'fp.syarat_id = s.id AND fp.proposal_id = '.$proposal_id, 'LEFT')
+				->where(['s.kegiatan_id' => $kegiatan_id, 's.tahapan_id' => $tahapan_id])->order_by('urutan')
 				->get()->result();
 		}
 		else

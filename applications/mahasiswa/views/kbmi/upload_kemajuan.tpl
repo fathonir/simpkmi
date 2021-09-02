@@ -42,6 +42,7 @@
 								 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
 								<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
 								<input type="file" name="file_syarat_{$syarat->id}" class="filestyle" />
+								{if $syarat->file_proposal_id != ''}<span><a class="btn btn-default btn-sm btn-cancel-edit" data-id="{$syarat->id}">Batal Ubah</a></span>{/if}
 								<span class="help-block">{$syarat->keterangan} ({$syarat->allowed_types}) - Maks. {$syarat->max_size}MB</span>
 								{if isset($syarat->upload_error_msg)}
 									<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
@@ -52,10 +53,7 @@
 								<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
 								<p class="form-control-static">
 									<a href="{base_url()}/../../upload/lampiran/{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
-									
-									{if $proposal->is_submited == FALSE}
-										<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
-									{/if}
+									<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
 								</p>
 							</div>
 						{/if}
@@ -64,8 +62,9 @@
 					
 					<div class="form-group">
 						<div class="col-lg-12 text-center">
+							<a href="{site_url('home')}" class="btn btn-default">Kembali</a>
 							{if $proposal->is_didanai}
-								<input type="submit" class="btn btn-info" name="tombol" value="Unggah" />
+								<input type="submit" class="btn btn-info" name="tombol" value="Upload" />
 							{/if}
 						</div>
 					</div>
@@ -84,11 +83,15 @@
 		$(':file').filestyle();
 		
 		$('.btn-edit').on('click', function() {
-			var syarat_id = $(this).data('id');
-			
+			const syarat_id = $(this).data('id');
 			$('.fg-view-' + syarat_id).hide();
 			$('.fg-upload-' + syarat_id).show();
-			
+		});
+
+		$('.btn-cancel-edit').on('click', function() {
+			const syarat_id = $(this).data('id');
+			$('.fg-view-' + syarat_id).show();
+			$('.fg-upload-' + syarat_id).hide();
 		});
 
 		$('input[name="dana_dipakai_t1"]').number(true, 0, ',', '.');
