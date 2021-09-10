@@ -519,12 +519,20 @@ class Review extends Reviewer_Controller
 		
 		$this->smarty->assign('penilaian_set', $penilaian_set);
 
-		// Khusus Monev KBMI 2020 pakai format 1-3
+		// Monev KBMI 2020 pakai format 1-3
 		if ($proposal->kegiatan_id == 14)
 		{
 			$skor_set = $this->db
 				->select("skor, concat(skor,' - ',keterangan) as keterangan", FALSE)
 				->where('skala_skor_id', SKALA_SKOR_1_3)
+				->get('skor')->result_array();
+		}
+		// Monev KBMI 2021 pakai format Perubahan 1-3
+		else if ($proposal->kegiatan_id == 18)
+		{
+			$skor_set = $this->db
+				->select("skor, keterangan", FALSE)
+				->where('skala_skor_id', SKALA_SKOR_PERUBAHAN_1_3)
 				->get('skor')->result_array();
 		}
 		else

@@ -68,3 +68,4 @@ define('TAHAPAN_EVALUASI_TAHAP_2', 7);
 define('SKALA_SKOR_1_7', 1);
 define('SKALA_SKOR_1_5', 2);
 define('SKALA_SKOR_1_3', 3);
+define('SKALA_SKOR_PERUBAHAN_1_3', 4);
