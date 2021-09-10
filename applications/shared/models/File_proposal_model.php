@@ -38,6 +38,15 @@ class File_proposal_model extends CI_Model
 			->get_where('file_proposal fp', ['fp.proposal_id' => $proposal_id])
 			->result();
 	}
+
+	public function list_by_proposal_tahapan($proposal_id, $tahapan_id)
+	{
+		return $this->db
+			->select('fp.*, s.syarat, s.is_upload')
+			->join('syarat s', 's.id = fp.syarat_id')
+			->get_where('file_proposal fp', ['fp.proposal_id' => $proposal_id, 's.tahapan_id' => $tahapan_id])
+			->result();
+	}
 	
 	public function get_single($id)
 	{

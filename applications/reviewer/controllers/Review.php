@@ -401,9 +401,7 @@ class Review extends Reviewer_Controller
 		$tahapan_proposal	= $this->tproposal_model->get_single($plot_reviewer->tahapan_proposal_id);
 		$tahapan			= $this->tahapan_model->get_single($tahapan_proposal->tahapan_id);
 		$proposal			= $this->proposal_model->get_single($tahapan_proposal->proposal_id);
-		$file_proposal_set	= $this->file_proposal_model->list_by_proposal($tahapan_proposal->proposal_id, [
-			'Kemajuan', 'Bukti Pembelanjaan', 'Bukti Kegiatan'
-		]);
+		$file_proposal_set	= $this->file_proposal_model->list_by_proposal_tahapan($tahapan_proposal->proposal_id, TAHAPAN_MONEV);
 		$kegiatan			= $this->kegiatan_model->get_single($proposal->kegiatan_id);
 		$pt					= $this->pt_model->get_single($proposal->perguruan_tinggi_id);
 		
