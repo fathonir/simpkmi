@@ -9,8 +9,6 @@
 					<tr>
 						<th>Tahun</th>
 						<th>Program</th>
-						<th>Maks Proposal</th>
-						<th>Maks Peserta</th>
 						<th>Status</th>
 						<th>Registrasi</th>
 						<th>Review</th>
@@ -23,8 +21,6 @@
 						<tr>
 							<td class="text-center">{$data->tahun}</td>
 							<td>{$data->nama_program}</td>
-							<td class="text-center">{$data->proposal_per_pt}</td>
-							<td class="text-center">{$data->peserta_per_pt}</td>
 							<td class="text-center">
 								{if $data->is_aktif == 1}<span class="label label-success">AKTIF</span>{else}<span class="label label-default">NONAKTIF</span>{/if}
 							</td>

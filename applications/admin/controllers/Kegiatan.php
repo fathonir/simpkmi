@@ -8,6 +8,7 @@
  * @property Syarat_model $syarat_model
  * @property Meeting_model $meeting_model
  * @property Tahapan_model $tahapan_model
+ * @property TahapanPendampingan_model $tahapan_pendampingan_model
  */
 class Kegiatan extends Admin_Controller
 {
@@ -23,6 +24,7 @@ class Kegiatan extends Admin_Controller
 		$this->load->model('Syarat_model', 'syarat_model');
 		$this->load->model('Meeting_model', 'meeting_model');
 		$this->load->model('Tahapan_model', 'tahapan_model');
+		$this->load->model('TahapanPendampingan_model', 'tahapan_pendampingan_model');
 	}
 	
 	public function index()
@@ -376,6 +378,52 @@ class Kegiatan extends Admin_Controller
 		
 		$this->smarty->assign('data', $meeting);
 		$this->smarty->assign('kegiatan', $kegiatan);
+		$this->smarty->display();
+	}
+
+	public function pendampingan()
+	{
+		$kegiatan_id = $this->input->get('kegiatan_id');
+		$this->smarty->assign('kegiatan_set', $this->kegiatan_model->list_all(PROGRAM_KBMI));
+		$this->smarty->assign('tahapan_pendampingan_set', $this->tahapan_pendampingan_model->list_by_kegiatan($kegiatan_id));
+		$this->smarty->display();
+	}
+
+	public function edit_pendampingan($id)
+	{
+		$tahapan_pendampingan = $this->tahapan_pendampingan_model->get_single($id);
+		$kegiatan = $this->kegiatan_model->get_single($tahapan_pendampingan->kegiatan_id);
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			$update_result = $this->tahapan_pendampingan_model->update($id);
+
+			if ($update_result)
+			{
+				$this->session->set_flashdata('result', array(
+					'page_title' => 'Edit Jadwal Pendampingan KBMI',
+					'message' => 'Berhasil mengupdate data',
+					'link_1' => '<a href="' . site_url('kegiatan/pendampingan?kegiatan_id=' . $tahapan_pendampingan->kegiatan_id) . '">Kembali</a>',
+				));
+
+				redirect(site_url('alert/success'));
+			}
+			else
+			{
+				$this->session->set_flashdata('result', array(
+					'page_title' => 'Edit Jadwal Pendampingan KBMI',
+					'message' => 'Gagal mengupdate data',
+					'link_1' => '<a href="' . site_url('kegiatan/pendampingan?kegiatan_id=' . $tahapan_pendampingan->kegiatan_id) . '">Kembali</a>',
+				));
+
+				redirect(site_url('alert/error'));
+			}
+
+			exit();
+		}
+
+		$this->smarty->assign('kegiatan', $kegiatan);
+		$this->smarty->assign('data', $tahapan_pendampingan);
 		$this->smarty->display();
 	}
 }

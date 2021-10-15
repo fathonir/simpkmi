@@ -41,8 +41,9 @@
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Setting <span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a href="{site_url('kegiatan')}">Jadwal Kegiatan</a></li>
+									<li><a href="{site_url('kegiatan/pendampingan')}">Jadwal Pendampingan</a></li>
 									<li><a href="{site_url('kegiatan/lokasi')}">Lokasi Workshop</a></li>
-                                    <li><a href="{site_url('kegiatan/meeting')}">Jadwal Online Workshop</a></li>
+									<li><a href="{site_url('kegiatan/meeting')}">Jadwal Online Workshop</a></li>
 									<li role="separator" class="divider"></li>
 									<li><a href="{site_url('download')}">Download File</a></li>
 								</ul>

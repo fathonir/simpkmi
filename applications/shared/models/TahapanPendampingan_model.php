@@ -3,6 +3,11 @@
 /**
  * Class TahapanPendampingan_model
  * @property CI_DB_query_builder $db
+ * @property int $id
+ * @property int $kegiatan_id
+ * @property string $nama_tahapan
+ * @property string $tgl_awal_laporan
+ * @property string $tgl_akhir_laporan
  */
 class TahapanPendampingan_model extends CI_Model
 {
@@ -30,8 +35,32 @@ class TahapanPendampingan_model extends CI_Model
 			->result();
 	}
 
+	/**
+	 * @param $id
+	 * @return TahapanPendampingan_model|null
+	 */
 	public function get_single($id)
 	{
 		return $this->db->get_where('tahapan_pendampingan', ['id' => $id], 1)->row();
+	}
+
+	public function update($id)
+	{
+		$post = $this->input->post();
+		$tahapan_pendampingan = $this->get_single($id);
+		$tahapan_pendampingan->nama_tahapan = $post['nama_tahapan'];
+		$tahapan_pendampingan->tgl_awal_laporan =
+			"{$post['awal_laporan_Year']}-" .
+			"{$post['awal_laporan_Month']}-" .
+			"{$post['awal_laporan_Day']} " .
+			"{$post['awal_laporan_time']}";
+		$tahapan_pendampingan->tgl_akhir_laporan =
+			"{$post['akhir_laporan_Year']}-" .
+			"{$post['akhir_laporan_Month']}-" .
+			"{$post['akhir_laporan_Day']} " .
+			"{$post['akhir_laporan_time']}";
+		$tahapan_pendampingan->updated_at = date('Y-m-d H:i:s');
+
+		return $this->db->update('tahapan_pendampingan', $tahapan_pendampingan, ['id' => $id]);
 	}
 }
