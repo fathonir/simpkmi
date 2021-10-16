@@ -194,9 +194,11 @@
 			</div>
 
 
-			<h3>Program Akselerasi Startup</h3>
+			<h3 id="asmi">Program Akselerasi Startup</h3>
 			{if $kegiatan_startup != NULL}
-				<p>Program Berjalan : {$kegiatan_startup->tahun}. Masa unggah: {$kegiatan_startup->tgl_awal_upload|date_format:"%d %B %Y %T"} sampai {$kegiatan_startup->tgl_akhir_upload|date_format:"%d %B %Y %T"}</p>
+				<p>Program Berjalan : {$kegiatan_startup->tahun}</p>
+				<p>Masa unggah usulan: {$kegiatan_startup->tgl_awal_upload|date_format:"%d %B %Y %T"} sampai {$kegiatan_startup->tgl_akhir_upload|date_format:"%d %B %Y %T"}</p>
+				<p>Masa unggah kemajuan: {$kegiatan_startup->tgl_awal_upload_kemajuan|date_format:"%d %B %Y %T"} sampai {$kegiatan_startup->tgl_akhir_upload_kemajuan|date_format:"%d %B %Y %T"}</p>
 			{/if}
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -209,6 +211,7 @@
 								<th>Presentasi</th>
 								<th>Produk</th>
 								<th>Pitckdeck Tahap 2</th>
+								<th>Kemajuan</th>
 								<th style="width: 1%;"></th>
 							</tr>
 						</thead>
@@ -247,13 +250,25 @@
 											{/if}
 										{/if}
 									</td>
+									<td>
+										{if $proposal_startup->jumlah_upload_kemajuan == 0}
+											<span class="label label-default">Belum Upload</span>
+										{elseif $proposal_startup->jumlah_upload_kemajuan < $proposal_startup->jumlah_syarat_kemajuan}
+											<span class="label label-warning">Belum Lengkap</span>
+										{elseif $proposal_startup->jumlah_upload_kemajuan >= $proposal_startup->jumlah_syarat_kemajuan}
+											<span class="label label-success">Sudah</span>
+										{/if}
+									</td>
 									<td style="white-space: nowrap">
-										<a href="{site_url('startup/update')}/{$proposal_startup->id}" class="btn btn-success">Unggah</a>
+										<a href="{site_url('startup/upload-syarat')}/{$proposal_startup->id}/1" class="btn btn-sm btn-success">Unggah</a>
 										{if $proposal_startup->is_submited == 0}
-											<a href="{site_url('startup/submit')}/{$proposal_startup->id}" class="btn btn-primary">Submit</a>
+											<a href="{site_url('startup/submit')}/{$proposal_startup->id}" class="btn btn-sm btn-primary">Submit</a>
 										{/if}
 										{if $proposal_startup->is_lolos_tahap_2 == true}
-											<a href="{site_url('startup/pitchdeck-2')}" class="btn btn-success">Unggah Pitchdeck Tahap 2</a>
+											<a href="{site_url('startup/pitchdeck-2')}/{$proposal_startup->id}" class="btn btn-sm btn-success">Unggah Tahap 2</a>
+										{/if}
+										{if $proposal_startup->is_didanai == 1}
+											<a href="{site_url('startup/upload-syarat')}/{$proposal_startup->id}/2" class="btn btn-sm btn-success">Unggah Kemajuan</a>
 										{/if}
 									</td>
 								</tr>
@@ -264,8 +279,6 @@
 							{/foreach}
 						</tbody>
 					</table>
-					<p>* Pitchdeck Tahap 2 Wajib di upload bagi yang Lolos Tahap 2</p>
-					<p>** Pitchdeck Tahap 2 di upload maksimal Tanggal <strong>01 Oktober 2020 Jam 23:59</strong></p>
 				</div>
 			</div>
 			

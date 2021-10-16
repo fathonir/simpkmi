@@ -7,10 +7,12 @@ use GuzzleHttp\Client;
  * @property Mahasiswa_model $mahasiswa_model
  * @property Dosen_model $dosen_model
  * @property Kegiatan_model $kegiatan_model
+ * @property Tahapan_model $tahapan_model
  * @property Proposal_model $proposal_model
  * @property Anggota_proposal_model $anggota_model
  * @property Syarat_model $syarat_model
  * @property GuzzleHttp\Client $client
+ * @property CI_Form_validation $form_validation
  */
 class Startup extends Mahasiswa_Controller
 {
@@ -24,6 +26,7 @@ class Startup extends Mahasiswa_Controller
 		$this->load->model(MODEL_MAHASISWA, 'mahasiswa_model');
 		$this->load->model(MODEL_DOSEN, 'dosen_model');
 		$this->load->model(MODEL_KEGIATAN, 'kegiatan_model');
+		$this->load->model(MODEL_TAHAPAN, 'tahapan_model');
 		$this->load->model(MODEL_PROPOSAL, 'proposal_model');
 		$this->load->model(MODEL_ANGGOTA_PROPOSAL, 'anggota_model');
 		$this->load->model(MODEL_SYARAT, 'syarat_model');
@@ -38,19 +41,45 @@ class Startup extends Mahasiswa_Controller
 		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
 		redirect('startup/update/' . $proposal->id);
 	}
-	
-	function update($proposal_id)
+
+	function trim_number($number)
 	{
-		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_STARTUP);
-		
-		$proposal = $this->proposal_model->get_single($proposal_id, $this->session->user->perguruan_tinggi_id);
-		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id, $proposal->id);
+		return str_replace('.', '', $number);
+	}
+
+	/**
+	 * @param $proposal_id
+	 * @param int $tahapan_id
+	 */
+	function upload_syarat($proposal_id, $tahapan_id = TAHAPAN_EVALUASI)
+	{
+		$proposal	= $this->proposal_model->get_single($proposal_id, $this->session->user->perguruan_tinggi_id);
+		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, $tahapan_id, $proposal->id);
+		$kegiatan   = $this->kegiatan_model->get_single($proposal->kegiatan_id);
 		
 		if ($this->input->method() == 'post')
 		{
 			$this->load->library('upload');
+			$this->load->library('form_validation');
 			
 			$error_count = 0;
+
+			// Pada tahapan monev, ada input penggunaan anggaran
+			if ($tahapan_id == TAHAPAN_MONEV)
+			{
+				$this->form_validation->set_rules('dana_dipakai_t1', 'Penggunaan Anggaran',
+					'required|callback_trim_number|less_than_equal_to[25000000]');
+
+				if ($this->form_validation->run() == FALSE)
+				{
+					$error_count++;
+				}
+				else
+				{
+					$proposal->dana_dipakai_t1 = str_replace('.', '', trim($this->input->post('dana_dipakai_t1')));
+					$this->proposal_model->update_dana_dipakai($proposal);
+				}
+			}
 			
 			foreach ($syarat_set as &$syarat)
 			{
@@ -161,13 +190,22 @@ class Startup extends Mahasiswa_Controller
 			
 			if ($error_count == 0)
 			{
-				redirect('startup/update/'.$proposal_id);
+				redirect("startup/upload-syarat/{$proposal_id}/{$tahapan_id}");
 				exit();
 			}
 		}
-		
+
+		$this->smarty->assign('tahapan_id', $tahapan_id);
 		$this->smarty->assign('proposal', $proposal);
+		$this->smarty->assign('kegiatan', $kegiatan);
 		$this->smarty->assign('syarat_set', $syarat_set);
+
+		// Jadwal
+		$now = date('Y-m-d H:i:s');
+		$this->smarty->assign('is_jadwal_upload_usulan',
+			$kegiatan->tgl_awal_upload < $now && $now < $kegiatan->tgl_akhir_upload);
+		$this->smarty->assign('is_jadwal_upload_kemajuan',
+			$kegiatan->tgl_awal_upload_kemajuan < $now && $now < $kegiatan->tgl_akhir_upload_kemajuan);
 		
 		$this->smarty->display();
 	}
@@ -211,10 +249,10 @@ class Startup extends Mahasiswa_Controller
 		$this->smarty->display();
 	}
 
-	function pitchdeck_2()
+	function pitchdeck_2($proposal_id)
 	{
-		$kegiatan = $this->kegiatan_model->get_aktif(PROGRAM_STARTUP);
-		$proposal = $this->proposal_model->get_by_ketua($kegiatan->id, $this->session->user->mahasiswa_id);
+		$proposal = $this->proposal_model->get_single($proposal_id, $this->session->user->perguruan_tinggi_id);
+		$kegiatan = $this->kegiatan_model->get_single($proposal->kegiatan_id);
 
 		// Pengecekan proposal lolos tahap 2
 		if ( ! $this->proposal_model->is_lolos_tahapan($proposal->id, TAHAPAN_EVALUASI_TAHAP_2))

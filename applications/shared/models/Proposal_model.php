@@ -11,6 +11,9 @@
  * @property int $dosen_id
  * @property bool $is_submited
  * @property bool $is_reviewed
+ * @property int $dana_disetujui
+ * @property int $dana_dipakai_t1
+ * @property int $dana_dipakai_t2
  * @property string $updated_at
  * @property Anggota_proposal_model $ketua
  * @property File_proposal_model[] $file_proposal_set
@@ -217,6 +220,18 @@ class Proposal_model extends CI_Model
 			->select('fp.nama_file')->from('file_proposal fp')
 			->join('syarat s', 's.id = fp.syarat_id and s.syarat = \'Pitchdeck Tahap 2\'')
 			->where('fp.proposal_id = p.id')->get_compiled_select();
+
+		$select_jumlah_syarat_kemajuan = $this->db
+			->select('count(*)', false)->from('syarat s')
+			->where('s.kegiatan_id = k.id', null, false)
+			->where('s.tahapan_id', TAHAPAN_MONEV)
+			->where('s.is_wajib', 1)
+			->get_compiled_select();
+
+		$select_jumlah_upload_kemajuan = $this->db
+			->select('count(*)', false)->from('file_proposal fp')
+			->join('syarat s', 's.id = fp.syarat_id and s.tahapan_id = ' . TAHAPAN_MONEV)
+			->where('fp.proposal_id = p.id')->get_compiled_select();
 		
 		return $this->db
 			->select('p.id, k.tahun, p.judul, p.is_submited, p.is_didanai')
@@ -226,6 +241,8 @@ class Proposal_model extends CI_Model
 			->select("({$select_link_presentasi}) as link_presentasi", FALSE)
 			->select("({$select_link_produk}) as link_produk", FALSE)
 			->select("({$select_file_pitchdeck_2}) as file_pitchdeck_2", FALSE)
+			->select("({$select_jumlah_syarat_kemajuan}) as jumlah_syarat_kemajuan", FALSE)
+			->select("({$select_jumlah_upload_kemajuan}) as jumlah_upload_kemajuan", FALSE)
 			->from('mahasiswa m')
 			->join('anggota_proposal ap', 'ap.mahasiswa_id = m.id AND ap.no_urut = 1') // Ketua di No Urut 1
 			->join('proposal p', 'p.id = ap.proposal_id')
@@ -318,6 +335,19 @@ class Proposal_model extends CI_Model
 	public function update($id, $model)
 	{
 		return $this->db->update('proposal', $model, ['id' => $id]);
+	}
+
+	/**
+	 * @param int $id
+	 * @param Proposal_model $model
+	 * @return bool
+	 */
+	public function update_dana_dipakai($model)
+	{
+		return $this->db->update('proposal', [
+			'dana_dipakai_t1' => $model->dana_dipakai_t1,
+			'updated_at' => date('Y-m-d H:i:s')
+		], ['id' => $model->id]);
 	}
 	
 	/**

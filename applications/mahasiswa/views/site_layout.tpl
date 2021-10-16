@@ -50,11 +50,7 @@
 								</ul>
 							</li>
 							<li>
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Program Akselerasi Startup <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-									<li><a href="{site_url('startup')}">Unggah Pitchdeck &amp; Produk</a></li>
-									<li><a href="{site_url('startup/pitchdeck-2')}">Unggah Pitchdeck Tahap II</a></li>
-								</ul>
+								<a href="{site_url('home')}#asmi">Program Akselerasi Startup</a>
 							</li>
 							<li>
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Program Online Workshop <span class="caret"></span></a>

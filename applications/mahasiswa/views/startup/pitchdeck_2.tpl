@@ -8,54 +8,65 @@
 				<fieldset>
 					<legend><h2>Unggah Pitchdeck Tahap 2</h2></legend>
 
-					{if $syarat->is_aktif and $syarat->is_upload}
+					{if $syarat != null}
 
-						<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
-							 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
-							<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
-							<input type="file" name="file_syarat_{$syarat->id}" class="filestyle" />
-							<span class="help-block">{$syarat->keterangan} ({$syarat->allowed_types}) - Maks. {$syarat->max_size}MB</span>
-							{if isset($syarat->upload_error_msg)}
-								<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
-							{/if}
-						</div>
+						{if $syarat->is_aktif and $syarat->is_upload}
 
-						<div class="form-group fg-view-{$syarat->id}" {if $syarat->file_proposal_id == ''}style="display: none"{/if}>
-							<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
-							<p class="form-control-static">
-								<a href="{base_url()}/../../upload/lampiran/{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
-								<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
-							</p>
-						</div>
-
-					{elseif $syarat->is_aktif and not $syarat->is_upload}
-
-						<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
-							 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
-							<label class="control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
-							<input type="text" name="file_syarat_{$syarat->id}" class="form-control" />
-							<span class="help-block">{$syarat->keterangan}</span>
-							{if isset($syarat->upload_error_msg)}
-								<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
-							{/if}
-						</div>
-
-						<div class="form-group fg-view-{$syarat->id}" {if $syarat->file_proposal_id == ''}style="display: none"{/if}>
-							<label class="control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
-							<p class="form-control-static">
-								<a href="{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
-								{if $proposal->is_submited == FALSE}
-									<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
+							<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
+								 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
+								<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<input type="file" name="file_syarat_{$syarat->id}" class="filestyle" />
+								<span class="help-block">{$syarat->keterangan} ({$syarat->allowed_types}) - Maks. {$syarat->max_size}MB</span>
+								{if isset($syarat->upload_error_msg)}
+									<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
 								{/if}
-							</p>
+							</div>
+
+							<div class="form-group fg-view-{$syarat->id}" {if $syarat->file_proposal_id == ''}style="display: none"{/if}>
+								<label class="control-label">{$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<p class="form-control-static">
+									<a href="{base_url()}/../../upload/lampiran/{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
+									<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
+								</p>
+							</div>
+
+						{elseif $syarat->is_aktif and not $syarat->is_upload}
+
+							<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
+								 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
+								<label class="control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<input type="text" name="file_syarat_{$syarat->id}" class="form-control" />
+								<span class="help-block">{$syarat->keterangan}</span>
+								{if isset($syarat->upload_error_msg)}
+									<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
+								{/if}
+							</div>
+
+							<div class="form-group fg-view-{$syarat->id}" {if $syarat->file_proposal_id == ''}style="display: none"{/if}>
+								<label class="control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<p class="form-control-static">
+									<a href="{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
+									{if $proposal->is_submited == FALSE}
+										<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
+									{/if}
+								</p>
+							</div>
+
+						{/if}
+
+						<div class="form-group">
+							<a href="{site_url('home')}" class="btn btn-default">Kembali</a>
+							<input type="submit" class="btn btn-primary" name="tombol" value="Simpan" />
+						</div>
+
+					{else}
+
+						<div class="form-group">
+							<a href="{site_url('home')}" class="btn btn-default">Kembali</a>
 						</div>
 
 					{/if}
 
-					<div class="form-group">
-						<a href="{site_url('home')}" class="btn btn-default">Kembali</a>
-						<input type="submit" class="btn btn-primary" name="tombol" value="Simpan" />
-					</div>
 
 				</fieldset>
 
