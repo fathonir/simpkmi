@@ -11,6 +11,7 @@
  * @property bool $is_wajib
  * @property int $urutan
  * @property bool $is_aktif
+ * @property bool $is_upload
  */
 class Syarat_model extends CI_Model
 {

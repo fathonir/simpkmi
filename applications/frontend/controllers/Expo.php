@@ -3,6 +3,7 @@
 /**
  * @author Fathoni <m.fathoni@mail.com>
  * @property Proposal_model $proposal_model
+ * @property TahapanProposal_model $tahapan_proposal_model
  * @property File_proposal_model $file_proposal_model
  * @property File_expo_model $file_expo_model
  * @property Kegiatan_model $kegiatan_model
@@ -23,6 +24,7 @@ class Expo extends Frontend_Controller
 		$this->check_credentials();
 		
 		$this->load->model(MODEL_PROPOSAL, 'proposal_model');
+		$this->load->model(MODEL_TAHAPAN_PROPOSAL, 'tahapan_proposal_model');
 		$this->load->model(MODEL_FILE_PROPOSAL, 'file_proposal_model');
 		$this->load->model(MODEL_FILE_EXPO, 'file_expo_model');
 		$this->load->model(MODEL_KEGIATAN, 'kegiatan_model');
@@ -38,7 +40,7 @@ class Expo extends Frontend_Controller
 	 */
 	public function index()
 	{
-		$tahun_set = ['2020' => '2020', '2019' => '2019', '2018' => '2018', '2017' => '2017'];
+		$tahun_set = array_combine(range(date('Y'), '2017'), range(date('Y'), '2017'));
 		$this->smarty->assign('tahun_set', $tahun_set);
 
 		$tahun_selected = ($this->input->get('tahun') == '') ? date('Y') : $this->input->get('tahun');
@@ -335,39 +337,65 @@ class Expo extends Frontend_Controller
 
 			// Validasi syarat
 			$syarat_has_error = FALSE;
-			foreach ($syarat_set as &$syarat)
+			foreach ($syarat_set as $syarat)
 			{
-				$this->upload->initialize([
-					'encrypt_name'	=> TRUE,
-					'upload_path'	=> FCPATH.'upload/lampiran/',
-					'allowed_types'	=> explode(',', $syarat->allowed_types),
-					'max_size'		=> (int)$syarat->max_size * 1024
-				]);
-
-				if ($this->upload->do_upload('file_syarat_' . $syarat->id))
+				if ($syarat->is_upload) // Untuk file upload
 				{
-					$data = $this->upload->data();
+					$this->upload->initialize([
+						'encrypt_name'	=> TRUE,
+						'upload_path'	=> FCPATH.'upload/lampiran/',
+						'allowed_types'	=> explode(',', $syarat->allowed_types),
+						'max_size'		=> (int)$syarat->max_size * 1024
+					]);
 
-					// Simpan informasi terupload, untuk pemrosesan setelah form_validation->run()
-					$file_syarat = new stdClass();
-					$file_syarat->syarat_id = $syarat->id;
-					$file_syarat->nama_file = $data['file_name'];
-					$file_syarat->nama_asli = $data['orig_name'];
-					$file_syarat->created_at = $now;
-					$file_syarat_set[] = $file_syarat;
-				}
-				else
-				{
-					if ($this->upload->display_errors('', '') == 'You did not select a file to upload.' && $syarat->is_wajib == 0)
+					if ($this->upload->do_upload('file_syarat_' . $syarat->id))
 					{
-						// Jika tidak wajib, maka tidak diperlukan file untuk upload
+						$data = $this->upload->data();
+
+						// Simpan informasi terupload, untuk pemrosesan setelah form_validation->run()
+						$file_syarat = new stdClass();
+						$file_syarat->syarat_id = $syarat->id;
+						$file_syarat->nama_file = $data['file_name'];
+						$file_syarat->nama_asli = $data['orig_name'];
+						$file_syarat->created_at = $now;
+						$file_syarat_set[] = $file_syarat;
 					}
 					else
 					{
-						$syarat->upload_error_msg = $this->upload->display_errors('', '');
-						$syarat_has_error = TRUE;
+						if ($this->upload->display_errors('', '') == 'You did not select a file to upload.' && $syarat->is_wajib == 0)
+						{
+							// Jika tidak wajib, maka tidak diperlukan file untuk upload
+						}
+						else
+						{
+							$syarat->upload_error_msg = $this->upload->display_errors('', '');
+							$syarat_has_error = TRUE;
+						}
 					}
 				}
+				else // Untuk link url
+				{
+					$nama_file_syarat = trim($this->input->post('file_syarat_'.$syarat->id));
+
+					// Validasi untuk wajib
+					if ($syarat->is_wajib && $nama_file_syarat == '')
+					{
+						$syarat->upload_error_msg = $syarat->syarat . ' field is required';
+						$syarat_has_error = TRUE;
+					}
+
+					// Diproses saat ada isi nya
+					if ($nama_file_syarat != '')
+					{
+						$file_syarat = new stdClass();
+						$file_syarat->syarat_id = $syarat->id;
+						$file_syarat->nama_file = $nama_file_syarat;
+						$file_syarat->nama_asli = '';
+						$file_syarat->created_at = $now;
+						$file_syarat_set[] = $file_syarat;
+					}
+				}
+
 			}
 
 			if ($this->form_validation->run() && $syarat_has_error == FALSE)
@@ -392,6 +420,14 @@ class Expo extends Frontend_Controller
 
 				// get last insert id
 				$proposal->id = $this->db->insert_id();
+
+				// Tambah tahapan Seleksi Expo KMI
+				$tahapan_proposal = new stdClass();
+				$tahapan_proposal->kegiatan_id = $kegiatan->id;
+				$tahapan_proposal->proposal_id = $proposal->id;
+				$tahapan_proposal->tahapan_id = TAHAPAN_SELEKSI_EXPO;
+				$tahapan_proposal->created_at = date('Y-m-d H:i:s');
+				$this->db->insert('tahapan_proposal', $tahapan_proposal);
 
 				// Proses anggota
 				for ($i = 1; $i <= 5; $i++)
@@ -420,14 +456,13 @@ class Expo extends Frontend_Controller
 					$this->db->insert('file_proposal', $file_syarat);
 				}
 
-				// terjadi kegagalan insert data
 				if ($this->db->trans_status() === TRUE)
 				{
 					$this->db->trans_commit();
 
 					$this->session->set_flashdata('result', array(
 						'page_title' => 'Tambah usulan untuk ikut Expo KMI',
-						'message' => 'Penambahan sudah berhasil !',
+						'message' => 'Penambahan usulan berhasil !',
 						'link_1' => anchor('expo', 'Kembali ke daftar expo', ['class' => 'alert-link'])
 					));
 
@@ -464,7 +499,8 @@ class Expo extends Frontend_Controller
 		$proposal->anggota_proposal_set = $this->anggota_proposal_model->list_by_proposal($proposal->id);
 		$proposal->file_proposal_set = $this->file_proposal_model->list_by_proposal($proposal->id);
 
-		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, $proposal->id);
+		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, TAHAPAN_SELEKSI_EXPO, $proposal->id);
+
 		if ($kegiatan_asal != NULL)
 		{
 			// Untuk tahun 2020 : Proposal dari KBMI / ASMI tanpa proposal
@@ -493,59 +529,66 @@ class Expo extends Frontend_Controller
 			$syarat_has_error = FALSE;
 			foreach ($syarat_set as &$syarat)
 			{
-				$this->upload->initialize([
-					'encrypt_name'	=> TRUE,
-					'upload_path'	=> FCPATH.'upload/lampiran/',
-					'allowed_types'	=> explode(',', $syarat->allowed_types),
-					'max_size'		=> (int)$syarat->max_size * 1024
-				]);
-
-				if ($this->upload->do_upload('file_syarat_' . $syarat->id))
+				if ($syarat->is_upload) // Untuk File Upload
 				{
-					$data = $this->upload->data();
+					$this->upload->initialize([
+						'encrypt_name'	=> TRUE,
+						'upload_path'	=> FCPATH.'upload/lampiran/',
+						'allowed_types'	=> explode(',', $syarat->allowed_types),
+						'max_size'		=> (int)$syarat->max_size * 1024
+					]);
 
-					// Simpan informasi terupload, untuk pemrosesan setelah form_validation->run()
-					$file_syarat = new stdClass();
-					$file_syarat->syarat_id = $syarat->id;
-					$file_syarat->nama_file = $data['file_name'];
-					$file_syarat->nama_asli = $data['orig_name'];
-					if ($syarat->file_proposal_id == null)
+					if ($this->upload->do_upload('file_syarat_' . $syarat->id))
 					{
-						$file_syarat->created_at = $now;
+						$data = $this->upload->data();
+
+						// Simpan informasi terupload, untuk pemrosesan setelah form_validation->run()
+						$file_syarat = new stdClass();
+						$file_syarat->syarat_id = $syarat->id;
+						$file_syarat->nama_file = $data['file_name'];
+						$file_syarat->nama_asli = $data['orig_name'];
+						if ($syarat->file_proposal_id == null)
+						{
+							$file_syarat->created_at = $now;
+						}
+						else
+						{
+							$file_syarat->id = $syarat->file_proposal_id;
+							$file_syarat->updated_at = $now;
+						}
+						$file_syarat_set[] = $file_syarat;
 					}
 					else
 					{
-						$file_syarat->id = $syarat->file_proposal_id;
-						$file_syarat->updated_at = $now;
-					}
-					$file_syarat_set[] = $file_syarat;
-				}
-				else
-				{
-					// Jika belum di pilih file nya
-					if ($this->upload->display_errors('', '') == 'You did not select a file to upload.')
-					{
-						// Jika tidak wajib, OK
-						if ( ! $syarat->is_wajib)
+						// Jika belum di pilih file nya
+						if ($this->upload->display_errors('', '') == 'You did not select a file to upload.')
 						{
+							// Jika tidak wajib, OK
+							if ( ! $syarat->is_wajib)
+							{
 
-						}
-						// atau jika sudah upload, OK
-						elseif ($syarat->file_proposal_id != NULL)
-						{
+							}
+							// atau jika sudah upload, OK
+							elseif ($syarat->file_proposal_id != NULL)
+							{
 
+							}
+							else // jika belum, munculkan errornya
+							{
+								$syarat->upload_error_msg = $this->upload->display_errors('', '');
+								$syarat_has_error = TRUE;
+							}
 						}
-						else // jika belum, munculkan errornya
+						else // untuk error yang bukan masalah belum dipilih file
 						{
 							$syarat->upload_error_msg = $this->upload->display_errors('', '');
 							$syarat_has_error = TRUE;
 						}
 					}
-					else // untuk error yang bukan masalah belum dipilih file
-					{
-						$syarat->upload_error_msg = $this->upload->display_errors('', '');
-						$syarat_has_error = TRUE;
-					}
+				}
+				else // untuk Link
+				{
+					// TODO: Perlu di update script untuk update link
 				}
 			}
 
@@ -670,6 +713,8 @@ class Expo extends Frontend_Controller
 			$this->file_proposal_model->delete_by_proposal($proposal->id);
 			// delete anggota
 			$this->anggota_proposal_model->delete_by_proposal($proposal->id);
+			// delete tahapan_proposal
+			$this->tahapan_proposal_model->delete($proposal->id, TAHAPAN_SELEKSI_EXPO);
 			// delete proposal
 			$this->proposal_model->delete($proposal->id, $this->session->perguruan_tinggi->id);
 			

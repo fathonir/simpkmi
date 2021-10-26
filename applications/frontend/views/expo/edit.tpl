@@ -95,29 +95,45 @@
 						</div>
 					</div>
 
-					<div class="form-group {if form_error('link_web') or form_error('link_instagram')}has-error{/if}">
-						<label for="link_web" class="col-lg-2 control-label">Website</label>
-						<div class="col-lg-4">
-							<input name="link_web" type="text" class="form-control" name="link_web" value="{set_value('link_web', $proposal->link_web)}"/>
-							{if form_error('link_web')}<span class="help-block text-danger">{form_error('link_web')}</span>{/if}
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group {if form_error('link_web')}has-error{/if}">
+								<label for="link_web" class="col-lg-4 control-label">Website</label>
+								<div class="col-lg-8">
+									<input name="link_web" type="text" class="form-control" name="link_web" value="{set_value('link_web', $proposal->link_web)}"/>
+									{if form_error('link_web')}<span class="help-block text-danger">{form_error('link_web')}</span>{/if}
+								</div>
+							</div>
 						</div>
-						<label for="link_instagram" class="col-lg-2 control-label">Instagram</label>
-						<div class="col-lg-4">
-							<input name="link_instagram" type="text" class="form-control" name="link_instagram" value="{set_value('link_instagram', $proposal->link_instagram)}"/>
-							{if form_error('link_instagram')}<span class="help-block text-danger">{form_error('link_instagram')}</span>{/if}
+						<div class="col-lg-6">
+							<div class="form-group {if form_error('link_instagram')}has-error{/if}">
+								<label for="link_instagram" class="col-lg-4 control-label">Instagram</label>
+								<div class="col-lg-8">
+									<input name="link_instagram" type="text" class="form-control" name="link_instagram" value="{set_value('link_instagram', $proposal->link_instagram)}"/>
+									{if form_error('link_instagram')}<span class="help-block text-danger">{form_error('link_instagram')}</span>{/if}
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<div class="form-group {if form_error('link_twitter') or form_error('link_youtube')}has-error{/if}">
-						<label for="link_twitter" class="col-lg-2 control-label">Twitter</label>
-						<div class="col-lg-4">
-							<input name="link_twitter" type="text" class="form-control" name="link_twitter" value="{set_value('link_twitter', $proposal->link_twitter)}"/>
-							{if form_error('link_twitter')}<span class="help-block text-danger">{form_error('link_twitter')}</span>{/if}
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group {if form_error('link_twitter')}has-error{/if}">
+								<label for="link_twitter" class="col-lg-4 control-label">Twitter</label>
+								<div class="col-lg-8">
+									<input name="link_twitter" type="text" class="form-control" name="link_twitter" value="{set_value('link_twitter', $proposal->link_twitter)}"/>
+									{if form_error('link_twitter')}<span class="help-block text-danger">{form_error('link_twitter')}</span>{/if}
+								</div>
+							</div>
 						</div>
-						<label for="link_youtube" class="col-lg-2 control-label">Youtube</label>
-						<div class="col-lg-4">
-							<input name="link_youtube" type="text" class="form-control" name="link_youtube" value="{set_value('link_youtube', $proposal->link_youtube)}"/>
-							{if form_error('link_youtube')}<span class="help-block text-danger">{form_error('link_youtube')}</span>{/if}
+						<div class="col-lg-6">
+							<div class="form-group {if form_error('link_youtube')}has-error{/if}">
+								<label for="link_youtube" class="col-lg-4 control-label">Youtube</label>
+								<div class="col-lg-8">
+									<input name="link_youtube" type="text" class="form-control" name="link_youtube" value="{set_value('link_youtube', $proposal->link_youtube)}"/>
+									{if form_error('link_youtube')}<span class="help-block text-danger">{form_error('link_youtube')}</span>{/if}
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -202,12 +218,12 @@
 				<fieldset>
 
 					{if count($syarat_set) > 0}
-						<legend>Upload</legend>
+						<legend>Upload &amp; Link</legend>
 					{/if}
 
 					{foreach $syarat_set as $syarat}
 
-						{if $syarat->is_aktif}
+						{if $syarat->is_aktif and $syarat->is_upload}
 
 							<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
 								 {if $syarat->file_proposal_id != ''}style="display: none"{/if}>
@@ -235,6 +251,36 @@
 									</p>
 								</div>
 							</div>
+
+						{elseif $syarat->is_aktif and not $syarat->is_upload}
+
+							<div class="form-group fg-upload-{$syarat->id} {if isset($syarat->upload_error_msg)}has-error{/if}"
+							 	{if $syarat->file_proposal_id != ''}style="display: none"{/if}>
+								<label class="col-lg-2 control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<div class="col-lg-10">
+									<input type="text" name="file_syarat_{$syarat->id}" class="form-control" />
+									<span class="help-block">{$syarat->keterangan}</span>
+									{if isset($syarat->upload_error_msg)}
+										<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
+									{/if}
+									{if $syarat->file_proposal_id != ''}
+										<a class="btn btn-sm btn-default btn-cancel-edit" data-id="{$syarat->id}">Batal</a>
+									{/if}
+								</div>
+							</div>
+
+							<div class="form-group fg-view-{$syarat->id}" {if $syarat->file_proposal_id == ''}style="display: none"{/if}>
+								<label class="col-lg-2 control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
+								<div class="col-lg-10">
+									<p class="form-control-static">
+										<a href="{$syarat->nama_file}" target="_blank">{$syarat->nama_file}</a>
+										{if $proposal->is_submited == FALSE}
+											<a class="btn btn-xs btn-default btn-edit" data-id="{$syarat->id}" title="Ubah file"><i class="glyphicon glyphicon-edit"></i> Ubah</a>
+										{/if}
+									</p>
+								</div>
+							</div>
+
 						{/if}
 
 					{/foreach}

@@ -127,7 +127,7 @@
 									{if $data->program_id_asal == ''}
 									<a href="{site_url('expo/hapus')}/{$data->id}" class="btn btn-xs btn-danger">Hapus</a>
 									{/if}
-									<a href="{site_url('expo/submit')}/{$data->id}" class="btn btn-xs btn-primary">Submit untuk Seleksi</a>
+									<a href="{site_url('expo/submit')}/{$data->id}" class="btn btn-xs btn-primary">Submit</a>
 								{/if}
 								{if $kegiatan->is_aktif and $kegiatan->is_masa_upload and $data->is_submited}
 									<a href="{site_url('expo/unsubmit')}/{$data->id}" class="btn btn-xs btn-default">Batalkan Submit</a>
@@ -142,6 +142,7 @@
 				</tbody>
 			</table>
 			<ul>
+				<!--
 				<li>Expo KMI 2020 ketentuannya sebagai berikut:
 					<ul>
 						<li>Proposal kategori KBMI dan ASMI Lolos Tahap 1, tidak diperlukan usulan baru. Hanya
@@ -150,6 +151,7 @@
 						<li>Setiap perguruan tinggi hanya dapat mengajukan maksimal 3 sub-kategori (1 subkategori = 1 usaha)</li>
 					</ul>
 				</li>
+				-->
 				<li>Informasi Status : <br/>
 					<span class="label label-default">Draft</span> : Usulan baru<br/>
 					<span class="label label-info">Seleksi Kelayakan</span> : Dalam proses seleksi oleh tim penilai.<br/>
