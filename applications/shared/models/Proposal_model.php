@@ -439,6 +439,7 @@ class Proposal_model extends CI_Model
 		return $this->db
 			->select('proposal.id, judul, nama_kategori, is_submited, is_didanai, is_ditolak, is_kmi_award')
 			->select('k_asal.program_id as program_id_asal')
+			->select('is_hadir_offline')
 			->from('proposal')
 			->join('kegiatan', 'kegiatan.id = kegiatan_id')
 			->join('kategori', 'kategori.id = kategori_id', 'LEFT')

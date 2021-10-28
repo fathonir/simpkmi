@@ -86,9 +86,10 @@
 					<tr>
 						<th class="text-center">#</th>
 						<th>Nama Usaha</th>
-						<th>Kategori</th>
-						<th>Sub-Kategori</th>
+						<th class="text-center">Kategori</th>
+						<th class="text-center">Sub-Kategori</th>
 						<th class="text-center">Status</th>
+						<th class="text-center">Kehadiran Expo</th>
 						<th style="width: 220px"></th>
 					</tr>
 				</thead>
@@ -118,6 +119,13 @@
 									{/if}
 								{else}
 									<span class="label label-default">Draft</span>
+								{/if}
+							</td>
+							<td class="text-center">
+								{if $data->is_hadir_offline == 1}
+									Hadir Offline
+								{elseif $data->is_hadir_offline == 0}
+									Online
 								{/if}
 							</td>
 							<td>

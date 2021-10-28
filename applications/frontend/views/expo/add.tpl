@@ -188,6 +188,27 @@
 						</div>
 					</div>
 
+					<!-- Tahun 2021 Tambah Kehadiran + Rekening BNI -->
+					{if $kegiatan->tahun == 2021}
+						<div class="form-group">
+							<label for="kategori" class="col-lg-2 control-label">Kehadiran Expo</label>
+							<div class="col-lg-4">
+								{$is_hadir_offline=set_value('is_hadir_offline')}
+								<select name="is_hadir_offline" class="form-control">
+									{html_options options=$kehadiran_set selected=$is_hadir_offline}
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="rekening" class="col-lg-2 control-label">Rekening BNI</label>
+							<div class="col-lg-4">
+								<input name="rekening" type="text" class="form-control" value="{set_value('rekening')}" />
+								<span class="help-block">Rekening BNI untuk kebutuhan QRIS ditampilkan di both virtual</span>
+							</div>
+						</div>
+					{/if}
+
 				</fieldset>
 
 				<fieldset>

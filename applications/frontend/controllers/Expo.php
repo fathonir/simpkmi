@@ -279,7 +279,7 @@ class Expo extends Frontend_Controller
 		$this->smarty->display();
 	}
 
-	private function set_form_validation()
+	private function set_form_validation($tahun = null)
 	{
 		// Validasi Isian
 		$this->form_validation->set_rules('judul', 'Nama Usaha', 'required');
@@ -311,7 +311,12 @@ class Expo extends Frontend_Controller
 		$this->form_validation->set_message('required_one', 'Isi salah satu dari Web / Instagram / Twitter');
 		return FALSE;
 	}
-	
+
+	private function kehadiran_set()
+	{
+		return [ '0' => 'Daring (Online)', '1' => 'Luring (Offline)' ];
+	}
+
 	public function add()
 	{
 		$this->load->library('form_validation');
@@ -323,11 +328,14 @@ class Expo extends Frontend_Controller
 
 		// get kegiatan aktif
 		$kegiatan = $this->kegiatan_model->get_single($this->input->get('kegiatan_id'));
+		$this->smarty->assign('kegiatan', $kegiatan);
 		$syarat_set = $this->syarat_model->list_by_kegiatan($kegiatan->id);
 
 		// get program studi
 		$program_studi_set = $this->program_studi_model->list_by_pt($this->session->perguruan_tinggi->npsn);
 		$this->smarty->assignForCombo('program_studi_set', $program_studi_set, 'id', 'nama');
+
+		$this->smarty->assign('kehadiran_set', $this->kehadiran_set());
 
 		if ($this->input->method() == 'post')
 		{
@@ -415,6 +423,8 @@ class Expo extends Frontend_Controller
 				$proposal->link_web = $this->input->post('link_web');
 				$proposal->link_twitter = $this->input->post('link_twitter');
 				$proposal->link_youtube = $this->input->post('link_youtube');
+				$proposal->is_hadir_offline = $this->input->post('is_hadir_offline');
+				$proposal->rekening = $this->input->post('rekening');
 				$proposal->created_at = $now;
 				$this->db->insert('proposal', $proposal);
 
@@ -499,6 +509,9 @@ class Expo extends Frontend_Controller
 		$proposal->anggota_proposal_set = $this->anggota_proposal_model->list_by_proposal($proposal->id);
 		$proposal->file_proposal_set = $this->file_proposal_model->list_by_proposal($proposal->id);
 
+		$kegiatan = $this->kegiatan_model->get_single($proposal->kegiatan_id);
+		$this->smarty->assign('kegiatan', $kegiatan);
+
 		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, TAHAPAN_SELEKSI_EXPO, $proposal->id);
 
 		if ($kegiatan_asal != NULL)
@@ -517,7 +530,9 @@ class Expo extends Frontend_Controller
 				}
 			}
 		}
+
 		$this->smarty->assign('syarat_set', $syarat_set);
+		$this->smarty->assign('kehadiran_set', $this->kehadiran_set());
 		
 		if ($this->input->method() == 'post')
 		{
