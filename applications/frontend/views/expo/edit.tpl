@@ -279,7 +279,7 @@
 							 	{if $syarat->file_proposal_id != ''}style="display: none"{/if}>
 								<label class="col-lg-2 control-label">Link {$syarat->syarat} {if $syarat->is_wajib}(Wajib){/if}</label>
 								<div class="col-lg-10">
-									<input type="text" name="file_syarat_{$syarat->id}" class="form-control" />
+									<input type="text" name="file_syarat_{$syarat->id}" class="form-control" value="{set_value("file_syarat_{$syarat->id}", $syarat->nama_file)}" />
 									<span class="help-block">{$syarat->keterangan}</span>
 									{if isset($syarat->upload_error_msg)}
 										<span class="help-block">ERROR: {$syarat->upload_error_msg}</span>
