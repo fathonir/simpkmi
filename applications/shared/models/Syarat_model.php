@@ -12,6 +12,9 @@
  * @property int $urutan
  * @property bool $is_aktif
  * @property bool $is_upload
+ * @property string $file_proposal_id
+ * @property string $nama_file
+ * @property string $nama_asli
  */
 class Syarat_model extends CI_Model
 {

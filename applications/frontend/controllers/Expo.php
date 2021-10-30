@@ -138,7 +138,7 @@ class Expo extends Frontend_Controller
 		// get proposal by perguruan tinggi
 		$proposal = $this->proposal_model->get_single($id, $this->session->perguruan_tinggi->id);
 		$anggota_proposal_set = $this->anggota_proposal_model->list_by_proposal($proposal->id);
-		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, $proposal->id);
+		$syarat_set = $this->syarat_model->list_by_kegiatan($proposal->kegiatan_id, TAHAPAN_SELEKSI_EXPO, $proposal->id);
 		$kegiatan_asal = $this->kegiatan_model->get_single($proposal->kegiatan_id_asal);
 
 		// Jika dari kegiatan sebelumnya, maka kelengkapan proposal harus di cek
@@ -542,7 +542,7 @@ class Expo extends Frontend_Controller
 
 			// Validasi syarat
 			$syarat_has_error = FALSE;
-			foreach ($syarat_set as &$syarat)
+			foreach ($syarat_set as $syarat)
 			{
 				if ($syarat->is_upload) // Untuk File Upload
 				{
@@ -603,7 +603,24 @@ class Expo extends Frontend_Controller
 				}
 				else // untuk Link
 				{
-					// TODO: Perlu di update script untuk update link
+					// Tambahkan baru jika belum ada
+					if ($syarat->file_proposal_id == null)
+					{
+						$file_syarat = new stdClass();
+						$file_syarat->proposal_id = $proposal->id;
+						$file_syarat->syarat_id = $syarat->id;
+						$file_syarat->nama_file = trim($this->input->post('file_syarat_' . $syarat->id));
+						$file_syarat->created_at = $now;
+						$file_syarat_set[] = $file_syarat;
+					}
+					else // Update jika sudah ada
+					{
+						$file_syarat = new stdClass();
+						$file_syarat->id = $syarat->file_proposal_id;
+						$file_syarat->nama_file = trim($this->input->post('file_syarat_' . $syarat->id));
+						$file_syarat->updated_at = $now;
+						$file_syarat_set[] = $file_syarat;
+					}
 				}
 			}
 
